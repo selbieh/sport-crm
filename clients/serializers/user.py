@@ -1,3 +1,4 @@
+from phonenumber_field.serializerfields import PhoneNumberField
 from rest_framework import serializers
 
 from clients.models import User
@@ -14,3 +15,11 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(generate_random_password())
         user.save()
         return user
+
+
+class ReadUserDataSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
+    mobile = PhoneNumberField()
+    email = serializers.EmailField()

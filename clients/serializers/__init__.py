@@ -1,2 +1,2 @@
 from .admin import GroupSerializer, ReadGroupsSerializer, ReadPermissionSerializer
-from .user import UserSerializer
+from .user import UserSerializer, ReadUserDataSerializer
