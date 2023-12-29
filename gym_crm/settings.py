@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     # our apps
     "clients",
     "subscriptions",
+    "sport_classes"
 ]
 
 SITE_ID = 1

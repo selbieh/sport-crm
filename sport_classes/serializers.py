@@ -22,7 +22,7 @@ class ReadSportClassSerializer(serializers.Serializer):
     gender = serializers.CharField()
     age_group = serializers.IntegerField()
     location = serializers.CharField()
-    description = serializers.TextField()
+    description = serializers.CharField()
     is_active = serializers.BooleanField()
 
 
