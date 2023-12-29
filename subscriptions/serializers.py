@@ -4,7 +4,13 @@ from rest_framework import serializers
 
 from clients.models import User
 from clients.serializers import ReadUserDataSerializer
-from subscriptions.models import Package, Plan, Subscription, FreezingRequest
+from subscriptions.models import (
+    Package,
+    Plan,
+    Subscription,
+    FreezingRequest,
+    SubscriptionAttendance,
+)
 from subscriptions.utility import DAYS
 
 
@@ -13,7 +19,7 @@ class PackagesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Package
-        exclude = ('is_safe_deleted', )
+        exclude = ("is_safe_deleted",)
 
 
 class ReadPackageSerializer(serializers.Serializer):
@@ -24,16 +30,20 @@ class ReadPackageSerializer(serializers.Serializer):
 
 
 class PlanSerializer(serializers.ModelSerializer):
-    package = serializers.PrimaryKeyRelatedField(queryset=Package.objects.all(), required=True)
+    package = serializers.PrimaryKeyRelatedField(
+        queryset=Package.objects.all(), required=True
+    )
 
     class Meta:
         model = Plan
-        exclude = ('is_safe_deleted', 'number_of_duration_days')
+        exclude = ("is_safe_deleted", "number_of_duration_days")
 
     def validate(self, attrs):
-        if attrs['duration_type'] == DAYS:
-            if 'number_of_sessions' in attrs:
-                raise serializers.ValidationError("type days not have number of sessions")
+        if attrs["duration_type"] == DAYS:
+            if "number_of_sessions" in attrs:
+                raise serializers.ValidationError(
+                    "type days not have number of sessions"
+                )
         return attrs
 
 
@@ -56,13 +66,13 @@ class UserSubscriptionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Subscription
-        exclude = ('end_date', 'is_safe_deleted', 'freezing_days')
+        exclude = ("end_date", "is_safe_deleted", "freezing_days")
 
     def validate_user(self, value):
         # Check if the requester is an admin
-        if self.context['request'].user.is_superuser:
+        if self.context["request"].user.is_superuser:
             # If admin, use the user from the request
-            request_body_user = self.context['request'].data.get('user')
+            request_body_user = self.context["request"].data.get("user")
             return User.objects.get(pk=request_body_user)
         else:
             # If not admin, use the default user
@@ -70,13 +80,17 @@ class UserSubscriptionSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         instance = super().create(validated_data)
-        instance.end_date = instance.start_date + timedelta(days=instance.plan.number_of_duration_days)
+        instance.end_date = instance.start_date + timedelta(
+            days=instance.plan.number_of_duration_days
+        )
         instance.save()
         return instance
 
     def update(self, instance, validated_data):
         instance = super().update(validated_data)
-        instance.end_date = instance.start_date + timedelta(days=instance.plan.number_of_duration_days)
+        instance.end_date = instance.start_date + timedelta(
+            days=instance.plan.number_of_duration_days
+        )
         instance.save()
         return instance
 
@@ -93,20 +107,59 @@ class FreezingRequestSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(
         default=serializers.CurrentUserDefault(),
     )
+    requested_by = serializers.HiddenField(
+        default=serializers.CurrentUserDefault(),
+    )
 
     class Meta:
         model = FreezingRequest
-        exclude = ['is_safe_deleted', 'duration']
+        exclude = ["is_safe_deleted", "duration"]
 
     def validate(self, attrs):
-        plan = attrs['plan']
-        plan = Plan.objects.get(id=plan)
+        plan = attrs["plan"]
         if not plan.number_of_freezing_days:
-            raise serializers.ValidationError('Plan is not freezable')
+            raise serializers.ValidationError("Plan is not freezable")
+        return attrs
+
+    def validate_user(self, value):
+        # Check if the requester is an admin
+        if self.context["request"].user.is_superuser:
+            # If admin, use the user from the request
+            request_body_user = self.context["request"].data.get("user")
+            print(request_body_user)
+            return User.objects.get(pk=request_body_user)
+        else:
+            # If not admin, use the default user
+            return value
 
     def create(self, validated_data):
         freezing_request = super().create(validated_data)
-        user_subscription = Subscription.objects.get(user=freezing_request.user, plan=freezing_request.plan)
+        user_subscription = Subscription.objects.get(
+            user=freezing_request.user, plan=freezing_request.plan
+        )
         user_subscription.end_date += timedelta(days=freezing_request.duration)
+        user_subscription.freezing_days += freezing_request.duration
         user_subscription.save()
         return freezing_request
+
+
+class SubscriptionAttendanceSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(
+        default=serializers.CurrentUserDefault(),
+    )
+
+    class Meta:
+        model = SubscriptionAttendance
+        exclude = [
+            "is_safe_deleted",
+        ]
+
+    def validate_user(self, value):
+        # Check if the requester is an admin
+        if self.context["request"].user.is_superuser:
+            # If admin, use the user from the request
+            request_body_user = self.context["request"].data.get("user")
+            return User.objects.get(pk=request_body_user)
+        else:
+            # If not admin, use the default user
+            return value

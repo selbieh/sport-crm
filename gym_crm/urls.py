@@ -20,6 +20,8 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 
+from clients.apis.auth import MyTokenObtainPairView
+
 schema_view = get_schema_view(
     openapi.Info(
         title="GYM CRM API",
@@ -35,6 +37,7 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("api/auth/login/", MyTokenObtainPairView.as_view(), name="login"),
     path("api/v1/client/", include("clients.urls"), name="client-v1"),
     path("api/v1/subscription/", include("subscriptions.urls"), name="subscription-v1"),
     path(

@@ -31,11 +31,13 @@ class Plan(TimeStampedModel):
         verbose_name = _("Plan")
         verbose_name_plural = _("Plans")
 
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
+    def save(
+        self, force_insert=False, force_update=False, using=None, update_fields=None
+    ):
         self.number_of_duration_days = self.number_of_days
-        super(Plan, self).save(force_insert=False, force_update=False, using=None,
-                                         update_fields=None)
+        super(Plan, self).save(
+            force_insert=False, force_update=False, using=None, update_fields=None
+        )
 
 
 class Subscription(TimeStampedModel):
@@ -59,7 +61,13 @@ class FreezingRequest(TimeStampedModel):
         User, on_delete=models.PROTECT, related_name="user_freezing_requests"
     )
     plan = models.ForeignKey(
-        Plan, on_delete=models.PROTECT, related_name="plan_freezing_requests"
+        Plan, on_delete=models.PROTECT, related_name="plan_freezing_requests", null=True
+    )
+    requested_by = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        related_name="requested_by_freezing_requests",
+        null=True,
     )
     start_date = models.DateField(null=False, blank=False)
     end_date = models.DateField(null=False, blank=False)
@@ -69,8 +77,21 @@ class FreezingRequest(TimeStampedModel):
         verbose_name = _("Freezing Request")
         verbose_name_plural = _("Freezing Requests")
 
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
+    def save(self, *args, **kwargs):
         self.duration = (self.end_date - self.start_date).days
-        super(Plan, self).save(force_insert=False, force_update=False, using=None,
-                                         update_fields=None)
+        print(self.duration)
+        super(FreezingRequest, self).save(*args, **kwargs)
+
+
+class SubscriptionAttendance(TimeStampedModel):
+    subscription = models.ForeignKey(
+        Subscription, on_delete=models.PROTECT, related_name="subscription_attendances"
+    )
+    user = models.ForeignKey(
+        User, on_delete=models.PROTECT, related_name="user_attendances"
+    )
+    is_attended = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = _("Subscription Attendance")
+        verbose_name_plural = _("Subscription Attendance")
