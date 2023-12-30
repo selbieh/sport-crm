@@ -8,7 +8,7 @@ from sport_classes.models import SportClass, ClassSubscription, ClassAttendance
 class SportClassSerializer(serializers.ModelSerializer):
     class Meta:
         model = SportClass
-        exclude = ("is_safe_delete",)
+        exclude = ("is_safe_deleted",)
 
 
 class ReadSportClassSerializer(serializers.Serializer):
