@@ -23,6 +23,8 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
             data = super(MyTokenObtainPairSerializer, self).validate(attrs)
             data["groups"] = user.groups.values_list("name", flat=True)
             data["admin"] = user.is_superuser
+            data["user_id"] = user.id
+            data["name"] = user.get_full_name()
         except User.DoesNotExist:
             data.update({"error": "user does not exist"})
         return data
