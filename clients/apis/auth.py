@@ -13,10 +13,13 @@ class MyTokenObtainPairView(TokenObtainPairView):
 
 
 class ChangePasswordApi(UpdateAPIView):
-    permission_classes = [IsAuthenticated, IsSystemAdmin]
+    permission_classes = [IsAuthenticated]
     serializer_class = ChangePasswordSerializer
     queryset = User.objects.all()
 
-    def get_object(self):
-        user = get_object_or_404(User, pk=self.kwargs["pk"])
-        return user
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return User.objects.all()
+        else:
+            print('user')
+            return User.objects.filter(pk=self.request.user.pk)
