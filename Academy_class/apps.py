@@ -3,4 +3,4 @@ from django.apps import AppConfig
 
 class SportClassesConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "sport_classes"
+    name = "Academy_class"

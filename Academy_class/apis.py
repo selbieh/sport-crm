@@ -3,25 +3,25 @@ from rest_framework.permissions import DjangoModelPermissions
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from sport_classes.models import SportClass, ClassSubscription, ClassAttendance
-from sport_classes.serializers import (
-    SportClassSerializer,
-    ReadSportClassSerializer,
+from Academy_class.models import AcademyClass, ClassSubscription, ClassAttendance
+from Academy_class.serializers import (
+    AcademyClassSerializer,
+    ReadAcademyClassSerializer,
     ClassSubscriptionSerializer,
     ReadUserSportSubscriptionSerializer,
     ClassAttendanceSerializer,
 )
 
 
-class SportClassViewSet(ModelViewSet):
+class AcademyClassViewSet(ModelViewSet):
     permission_classes = [DjangoModelPermissions]
-    serializer_class = SportClassSerializer
-    queryset = SportClass.objects.filter(is_safe_deleted=False).order_by("-created_at")
+    serializer_class = AcademyClassSerializer
+    queryset = AcademyClass.objects.filter(is_safe_deleted=False).order_by("-created_at")
 
     def get_serializer_class(self):
         if self.request.method == "GET":
-            return ReadSportClassSerializer
-        return SportClassSerializer
+            return ReadAcademyClassSerializer
+        return AcademyClassSerializer
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()

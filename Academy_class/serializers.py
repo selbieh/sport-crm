@@ -2,16 +2,16 @@ from rest_framework import serializers
 
 from clients.models import User
 from clients.serializers import ReadUserDataSerializer
-from sport_classes.models import SportClass, ClassSubscription, ClassAttendance
+from Academy_class.models import AcademyClass, ClassSubscription, ClassAttendance
 
 
-class SportClassSerializer(serializers.ModelSerializer):
+class AcademyClassSerializer(serializers.ModelSerializer):
     class Meta:
-        model = SportClass
+        model = AcademyClass
         exclude = ("is_safe_deleted",)
 
 
-class ReadSportClassSerializer(serializers.Serializer):
+class ReadAcademyClassSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     name = serializers.CharField()
     dates = serializers.CharField()
@@ -48,7 +48,7 @@ class ClassSubscriptionSerializer(serializers.ModelSerializer):
 
 class ReadUserSportSubscriptionSerializer(serializers.Serializer):
     id = serializers.IntegerField()
-    sport_class = ReadSportClassSerializer()
+    academy_class = ReadAcademyClassSerializer()
     user = ReadUserDataSerializer()
     start_date = serializers.DateField()
     end_date = serializers.DateField()

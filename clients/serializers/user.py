@@ -23,3 +23,5 @@ class ReadUserDataSerializer(serializers.Serializer):
     last_name = serializers.CharField()
     mobile = PhoneNumberField()
     email = serializers.EmailField()
+    gender = serializers.CharField()
+

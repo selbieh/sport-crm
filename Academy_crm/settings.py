@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     # our apps
     "clients",
     "subscriptions",
-    "sport_classes",
+    "Academy_class",
 ]
 
 SITE_ID = 1
@@ -71,7 +71,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "gym_crm.urls"
+ROOT_URLCONF = "Academy_crm.urls"
 
 TEMPLATES = [
     {
@@ -89,7 +89,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "gym_crm.wsgi.application"
+WSGI_APPLICATION = "Academy_crm.wsgi.application"
 AUTH_USER_MODEL = "clients.User"
 
 # Database

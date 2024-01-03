@@ -1,14 +1,14 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from sport_classes.apis import (
-    SportClassViewSet,
+from Academy_class.apis import (
+    AcademyClassViewSet,
     ClassSubscriptionViewSet,
     ClassAttendanceViewSet,
 )
 
 router = DefaultRouter()
-router.register(r"sport-class", SportClassViewSet, basename="sport_class_api")
+router.register(r"academy-class", AcademyClassViewSet, basename="academy_class_api")
 router.register(
     r"subscription-class", ClassSubscriptionViewSet, basename="subscription_class_api"
 )

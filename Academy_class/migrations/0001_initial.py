@@ -91,7 +91,7 @@ class Migration(migrations.Migration):
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.PROTECT,
                         related_name="class_subscription_attendances",
-                        to="sport_classes.classsubscription",
+                        to="Academy_class.classsubscription",
                     ),
                 ),
             ],
@@ -161,7 +161,7 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(
                 on_delete=django.db.models.deletion.PROTECT,
                 related_name="sport_class_subscriptions",
-                to="sport_classes.sportclass",
+                to="Academy_class.sportclass",
             ),
         ),
     ]

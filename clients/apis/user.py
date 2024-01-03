@@ -4,12 +4,17 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from clients.models import User
-from clients.serializers import UserSerializer
+from clients.serializers import UserSerializer, ReadUserDataSerializer
 
 
 class UserViewSet(ModelViewSet):
     permission_classes = [DjangoModelPermissions]
     serializer_class = UserSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return ReadUserDataSerializer
+        return UserSerializer
 
     def get_queryset(self):
         if self.request.user.has_perm("view_user"):

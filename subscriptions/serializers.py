@@ -26,6 +26,7 @@ class ReadPackageSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     name = serializers.CharField()
     description = serializers.CharField()
+    is_active = serializers.BooleanField()
     created_at = serializers.DateTimeField()
 
 

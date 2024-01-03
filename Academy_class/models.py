@@ -2,11 +2,11 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from clients.models import TimeStampedModel, User
 from clients.utility import GENDER_CHOICES
-from sport_classes.utility import MALE
+from Academy_class.utility import MALE
 
 
 # Create your models here.
-class SportClass(TimeStampedModel):
+class AcademyClass(TimeStampedModel):
     name = models.CharField(max_length=150, null=False, blank=False)
     dates = models.CharField(max_length=255, null=True, blank=True)
     time_from = models.TimeField(null=True, blank=True)
@@ -22,16 +22,16 @@ class SportClass(TimeStampedModel):
     is_active = models.BooleanField(default=True)
 
     class Meta:
-        verbose_name = _("Sport Class")
-        verbose_name_plural = _("Sport Classes")
+        verbose_name = _("Academy Class")
+        verbose_name_plural = _("Academy Classes")
 
 
 class ClassSubscription(TimeStampedModel):
     user = models.ForeignKey(
         User, on_delete=models.PROTECT, related_name="user_class_subscriptions"
     )
-    sport_class = models.ForeignKey(
-        SportClass, on_delete=models.PROTECT, related_name="sport_class_subscriptions"
+    academy_class = models.ForeignKey(
+        AcademyClass, on_delete=models.PROTECT, related_name="academy_class_subscriptions", null=True
     )
     start_date = models.DateField(auto_now_add=True)
     end_date = models.DateField(null=True)
