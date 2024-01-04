@@ -10,6 +10,8 @@ from subscriptions.models import (
     Subscription,
     FreezingRequest,
     SubscriptionAttendance,
+    WalkInType,
+    WalkInUser,
 )
 from subscriptions.utility import DAYS
 
@@ -164,3 +166,30 @@ class SubscriptionAttendanceSerializer(serializers.ModelSerializer):
         else:
             # If not admin, use the default user
             return value
+
+
+class WalkInTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WalkInType
+        exclude = ("is_safe_deleted",)
+
+
+class ReadWalkInTypeSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField()
+    description = serializers.CharField()
+    price = serializers.DecimalField(max_digits=6, decimal_places=2)
+    created_at = serializers.DateTimeField()
+
+
+class WalkInUserSerializer(serializers.ModelSerializer):
+    walk_in_type = serializers.PrimaryKeyRelatedField(
+        queryset=WalkInType.objects.all(), required=True
+    )
+    added_by = serializers.HiddenField(
+        default=serializers.CurrentUserDefault(),
+    )
+
+    class Meta:
+        model = WalkInUser
+        exclude = ("is_safe_deleted",)

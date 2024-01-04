@@ -47,10 +47,12 @@ INSTALLED_APPS = [
     "dj_rest_auth.registration",
     "drf_standardized_errors",
     "drf_yasg",
+    "django_filters",
     # our apps
     "clients",
     "subscriptions",
     "Academy_class",
+    "leads",
 ]
 
 SITE_ID = 1
@@ -180,3 +182,4 @@ SIMPLE_JWT = {
 }
 
 CORS_ALLOW_ALL_ORIGINS = True
+APPEND_SLASH = False

@@ -10,7 +10,7 @@ from clients.apis import (
 
 router = DefaultRouter()
 router.register(r"role", RolesViewSet, basename="roles_api")
-router.register(r"user", UserViewSet, basename="roles_api")
+router.register(r"user", UserViewSet, basename="users_api")
 
 urlpatterns = [
     path("", include(router.urls)),

@@ -16,7 +16,9 @@ from Academy_class.serializers import (
 class AcademyClassViewSet(ModelViewSet):
     permission_classes = [DjangoModelPermissions]
     serializer_class = AcademyClassSerializer
-    queryset = AcademyClass.objects.filter(is_safe_deleted=False).order_by("-created_at")
+    queryset = AcademyClass.objects.filter(is_safe_deleted=False).order_by(
+        "-created_at"
+    )
 
     def get_serializer_class(self):
         if self.request.method == "GET":

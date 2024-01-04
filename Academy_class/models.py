@@ -8,7 +8,7 @@ from Academy_class.utility import MALE
 # Create your models here.
 class AcademyClass(TimeStampedModel):
     name = models.CharField(max_length=150, null=False, blank=False)
-    dates = models.CharField(max_length=255, null=True, blank=True)
+    dates = models.JSONField(default=list, null=True, blank=True)
     time_from = models.TimeField(null=True, blank=True)
     time_to = models.TimeField(null=True, blank=True)
     instructor = models.ForeignKey(
@@ -16,7 +16,7 @@ class AcademyClass(TimeStampedModel):
     )
     maximum_capacity = models.IntegerField(default=0)
     gender = models.CharField(max_length=50, choices=GENDER_CHOICES, default=MALE)
-    age_group = models.IntegerField(default=0)
+    age_group = models.CharField(max_length=155, null=True, blank=True)
     location = models.CharField(max_length=255, null=True, blank=True)
     description = models.TextField()
     is_active = models.BooleanField(default=True)
@@ -31,7 +31,10 @@ class ClassSubscription(TimeStampedModel):
         User, on_delete=models.PROTECT, related_name="user_class_subscriptions"
     )
     academy_class = models.ForeignKey(
-        AcademyClass, on_delete=models.PROTECT, related_name="academy_class_subscriptions", null=True
+        AcademyClass,
+        on_delete=models.PROTECT,
+        related_name="academy_class_subscriptions",
+        null=True,
     )
     start_date = models.DateField(auto_now_add=True)
     end_date = models.DateField(null=True)

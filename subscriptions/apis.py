@@ -9,6 +9,8 @@ from subscriptions.models import (
     Subscription,
     FreezingRequest,
     SubscriptionAttendance,
+    WalkInType,
+    WalkInUser,
 )
 from subscriptions.serializers import (
     PackagesSerializer,
@@ -19,6 +21,9 @@ from subscriptions.serializers import (
     ReadUserSubscriptionSerializer,
     FreezingRequestSerializer,
     SubscriptionAttendanceSerializer,
+    WalkInTypeSerializer,
+    ReadWalkInTypeSerializer,
+    WalkInUserSerializer,
 )
 
 
@@ -89,3 +94,32 @@ class SubscriptionAttendanceViewSet(ModelViewSet):
     queryset = SubscriptionAttendance.objects.filter(is_safe_deleted=False).order_by(
         "-created_at"
     )
+
+
+class WalkInTypeViewSet(ModelViewSet):
+    permission_classes = [DjangoModelPermissions]
+    serializer_class = WalkInTypeSerializer
+    queryset = WalkInType.objects.filter(is_safe_deleted=False)
+
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return ReadWalkInTypeSerializer
+        return WalkInTypeSerializer
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.is_safe_deleted = True
+        instance.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class WalkInUserViewSet(ModelViewSet):
+    permission_classes = [DjangoModelPermissions]
+    serializer_class = WalkInUserSerializer
+    queryset = WalkInUser.objects.filter(is_safe_deleted=False)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.is_safe_deleted = True
+        instance.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)

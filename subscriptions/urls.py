@@ -7,6 +7,8 @@ from subscriptions.apis import (
     UserSubscriptionViewSet,
     FreezingRequestViewSet,
     SubscriptionAttendanceViewSet,
+    WalkInTypeViewSet,
+    WalkInUserViewSet,
 )
 
 router = DefaultRouter()
@@ -17,6 +19,8 @@ router.register(
     r"freezing-request", FreezingRequestViewSet, basename="freezing_requests_api"
 )
 router.register(r"attendance", SubscriptionAttendanceViewSet, basename="attendance_api")
+router.register(r"walk-in-type", WalkInTypeViewSet, basename="walk-in-type_api")
+router.register(r"walk-in-user", WalkInUserViewSet, basename="walk-in-user_api")
 
 urlpatterns = [
     path("", include(router.urls)),

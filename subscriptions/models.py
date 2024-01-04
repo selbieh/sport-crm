@@ -1,5 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from phonenumber_field.modelfields import PhoneNumberField
+
 from clients.models import TimeStampedModel, User
 from subscriptions.utility import DURATION_TYPE_CHOICES, DAYS
 
@@ -79,7 +81,6 @@ class FreezingRequest(TimeStampedModel):
 
     def save(self, *args, **kwargs):
         self.duration = (self.end_date - self.start_date).days
-        print(self.duration)
         super(FreezingRequest, self).save(*args, **kwargs)
 
 
@@ -95,3 +96,53 @@ class SubscriptionAttendance(TimeStampedModel):
     class Meta:
         verbose_name = _("Subscription Attendance")
         verbose_name_plural = _("Subscription Attendance")
+
+
+class WalkInType(TimeStampedModel):
+    name = models.CharField(_("name"), max_length=155, null=False, blank=False)
+    description = models.TextField(_("description"), null=True, blank=True)
+    price = models.DecimalField(_("price"), max_digits=6, decimal_places=2)
+
+    class Meta:
+        verbose_name = _("WalkIn Type")
+        verbose_name_plural = _("WalkIn Types")
+
+
+class WalkInUser(TimeStampedModel):
+    walk_in_type = models.ForeignKey(
+        WalkInType, on_delete=models.PROTECT, related_name="walk_in_users"
+    )
+    full_name = models.CharField(
+        _("full_name"), max_length=255, null=False, blank=False
+    )
+    mobile = PhoneNumberField(_("mobile"), null=False, blank=False)
+    added_by = models.ForeignKey(
+        User, on_delete=models.PROTECT, related_name="added_by_walk_in_users", null=True
+    )
+    payment_method = models.CharField(
+        _("payment_method"), max_length=255, null=True, blank=True
+    )
+    total_amount = models.DecimalField(
+        _("total_amount"), max_digits=6, decimal_places=2
+    )
+    discount_type = models.CharField(
+        _("discount_type"), max_length=150, null=True, blank=True
+    )
+    price_after_discount = models.DecimalField(
+        _("price_after_discount"), max_digits=6, decimal_places=2
+    )
+    notes = models.TextField(_("notes"), null=True, blank=True)
+
+    class Meta:
+        verbose_name = _("WalkIn User")
+        verbose_name_plural = _("WalkIn Users")
+
+    def save(
+        self, force_insert=False, force_update=False, using=None, update_fields=None
+    ):
+        if not self.discount_type:
+            self.total_amount = self.walk_in_type.price
+            self.price_after_discount = self.walk_in_type.price
+        super(WalkInUser, self).save(
+            force_insert=False, force_update=False, using=None, update_fields=None
+        )

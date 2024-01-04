@@ -2,6 +2,7 @@ from phonenumber_field.serializerfields import PhoneNumberField
 from rest_framework import serializers
 
 from clients.models import User
+from clients.serializers import ReadGroupsSerializer
 from clients.utility import generate_random_password
 
 
@@ -24,4 +25,4 @@ class ReadUserDataSerializer(serializers.Serializer):
     mobile = PhoneNumberField()
     email = serializers.EmailField()
     gender = serializers.CharField()
-
+    groups = ReadGroupsSerializer(many=True)

@@ -21,5 +21,5 @@ class ChangePasswordApi(UpdateAPIView):
         if self.request.user.is_superuser:
             return User.objects.all()
         else:
-            print('user')
+            print("user")
             return User.objects.filter(pk=self.request.user.pk)
