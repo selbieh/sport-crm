@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
@@ -15,18 +16,14 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
     def validate(self, attrs):
         mobile = attrs.get("mobile")
-        data = {}
-        try:
-            user = User.objects.get(mobile=mobile)
-            if not user.is_whatsapp_verified:
-                raise serializers.ValidationError("user is not verified")
-            data = super(MyTokenObtainPairSerializer, self).validate(attrs)
-            data["groups"] = user.groups.values_list("name", flat=True)
-            data["admin"] = user.is_superuser
-            data["user_id"] = user.id
-            data["name"] = user.get_full_name()
-        except User.DoesNotExist:
-            data.update({"error": "user does not exist"})
+        user = get_object_or_404(User, mobile=mobile, is_safe_deleted=False)
+        if not user.is_whatsapp_verified:
+            raise serializers.ValidationError("user is not verified")
+        data = super(MyTokenObtainPairSerializer, self).validate(attrs)
+        data["groups"] = user.groups.values_list("name", flat=True)
+        data["admin"] = user.is_superuser
+        data["user_id"] = user.id
+        data["name"] = user.get_full_name()
         return data
 
 

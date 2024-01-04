@@ -18,7 +18,7 @@ class UserViewSet(ModelViewSet):
 
     def get_queryset(self):
         if self.request.user.has_perm("view_user"):
-            return User.objects.all()
+            return User.objects.filter(is_safe_deleted=False)
         else:
             return User.objects.filter(id=self.request.user.id)
 
