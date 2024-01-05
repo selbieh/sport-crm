@@ -14,7 +14,7 @@ class AcademyClassSerializer(serializers.ModelSerializer):
 class ReadAcademyClassSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     name = serializers.CharField()
-    dates = serializers.CharField()
+    dates = serializers.ListField()
     time_from = serializers.TimeField()
     time_to = serializers.TimeField()
     instructor = ReadUserDataSerializer()
