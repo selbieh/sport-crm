@@ -17,7 +17,8 @@ class User(AbstractUser, TimeStampedModel):
     gender = models.CharField(_("gender"), max_length=50, default=GENDER_CHOICES)
     is_whatsapp_verified = models.BooleanField(_("is_mobile_verified"), default=False)
     avatar = models.FileField(upload_to=upload_avatar, blank=True, null=True)
-
+    referred_by = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True,
+                                    related_name="referred_by_users")
     EMAIL_FIELD = "mobile"
     USERNAME_FIELD = "mobile"
     REQUIRED_FIELDS = ["username"]
@@ -29,7 +30,10 @@ class User(AbstractUser, TimeStampedModel):
     def __str__(self):
         return str(self.mobile)
 
-    # def save(self, *args, **kwargs):
-    #     group, created = Group.objects.get_or_create(name=self.role)
-    #     super().save(*args, **kwargs)
-    #     self.groups.add(group.id)
+
+class EmployeeAttendance(TimeStampedModel):
+    employee = models.ForeignKey(
+        User, on_delete=models.PROTECT, related_name="employee_attendances"
+    )
+    checkin_time = models.TimeField(null=True)
+    checkout_time = models.TimeField(null=True)

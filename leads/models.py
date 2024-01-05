@@ -30,6 +30,7 @@ class Lead(TimeStampedModel):
     source = models.CharField(
         _("lead_source"), max_length=150, choices=SOURCE_CHOICES, null=True, blank=True
     )
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True, related_name="user_lead")
 
     class Meta:
         verbose_name = _("Lead")

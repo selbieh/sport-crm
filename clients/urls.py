@@ -5,12 +5,13 @@ from clients.apis import (
     RolesViewSet,
     ListPermissionsApi,
     UserViewSet,
-    ChangePasswordApi,
+    ChangePasswordApi, EmployeeAttendanceViewSet,
 )
 
 router = DefaultRouter()
 router.register(r"role", RolesViewSet, basename="roles_api")
 router.register(r"user", UserViewSet, basename="users_api")
+router.register(r"employee/attendance", EmployeeAttendanceViewSet, basename="employee_attendance_api")
 
 urlpatterns = [
     path("", include(router.urls)),

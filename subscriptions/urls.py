@@ -14,7 +14,7 @@ from subscriptions.apis import (
 router = DefaultRouter()
 router.register(r"packages", PackagesViewSet, basename="packages_api")
 router.register(r"plans", PlanViewSet, basename="plans_api")
-router.register(r"subscription", UserSubscriptionViewSet, basename="subscriptions_api")
+router.register(r"user", UserSubscriptionViewSet, basename="subscriptions_api")
 router.register(
     r"freezing-request", FreezingRequestViewSet, basename="freezing_requests_api"
 )

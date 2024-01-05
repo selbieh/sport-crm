@@ -20,7 +20,7 @@ class ReadAcademyClassSerializer(serializers.Serializer):
     instructor = ReadUserDataSerializer()
     maximum_capacity = serializers.IntegerField()
     gender = serializers.CharField()
-    age_group = serializers.IntegerField()
+    age_group = serializers.CharField()
     location = serializers.CharField()
     description = serializers.CharField()
     is_active = serializers.BooleanField()

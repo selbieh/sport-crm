@@ -63,23 +63,13 @@ class ReadPlanSerializer(serializers.Serializer):
 
 
 class UserSubscriptionSerializer(serializers.ModelSerializer):
-    user = serializers.HiddenField(
+    sales_person = serializers.HiddenField(
         default=serializers.CurrentUserDefault(),
     )
 
     class Meta:
         model = Subscription
         exclude = ("end_date", "is_safe_deleted", "freezing_days")
-
-    def validate_user(self, value):
-        # Check if the requester is an admin
-        if self.context["request"].user.is_superuser:
-            # If admin, use the user from the request
-            request_body_user = self.context["request"].data.get("user")
-            return User.objects.get(pk=request_body_user)
-        else:
-            # If not admin, use the default user
-            return value
 
     def create(self, validated_data):
         instance = super().create(validated_data)

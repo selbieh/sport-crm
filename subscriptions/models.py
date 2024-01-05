@@ -52,10 +52,36 @@ class Subscription(TimeStampedModel):
     start_date = models.DateField(auto_now_add=True)
     end_date = models.DateField(null=True)
     freezing_days = models.IntegerField(default=False)
+    payment_method = models.CharField(
+        _("payment_method"), max_length=255, null=True, blank=True
+    )
+    total_amount = models.DecimalField(
+        _("total_amount"), max_digits=6, decimal_places=2, null=True
+    )
+    discount_type = models.CharField(
+        _("discount_type"), max_length=150, null=True, blank=True
+    )
+    price_after_discount = models.DecimalField(
+        _("price_after_discount"), max_digits=6, decimal_places=2, null=True
+    )
+    sales_person = models.ForeignKey(
+        User, on_delete=models.PROTECT, related_name="sales_person_subscriptions", null=True
+    )
+    comments = models.TextField(null=True, blank=True)
 
     class Meta:
         verbose_name = _("Subscription")
         verbose_name_plural = _("Subscriptions")
+
+    def save(
+        self, force_insert=False, force_update=False, using=None, update_fields=None
+    ):
+        if not self.discount_type:
+            self.total_amount = self.plan.price
+            self.price_after_discount = self.plan.price
+        super(Subscription, self).save(
+            force_insert=False, force_update=False, using=None, update_fields=None
+        )
 
 
 class FreezingRequest(TimeStampedModel):
@@ -91,7 +117,8 @@ class SubscriptionAttendance(TimeStampedModel):
     user = models.ForeignKey(
         User, on_delete=models.PROTECT, related_name="user_attendances"
     )
-    is_attended = models.BooleanField(default=False)
+    checkin_time = models.TimeField(null=True)
+    checkout_time = models.TimeField(null=True)
 
     class Meta:
         verbose_name = _("Subscription Attendance")

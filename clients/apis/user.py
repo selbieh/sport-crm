@@ -6,7 +6,8 @@ from rest_framework.viewsets import ModelViewSet
 
 from clients.filters import UserFilter
 from clients.models import User
-from clients.serializers import UserSerializer, ReadUserDataSerializer
+from clients.models.user import EmployeeAttendance
+from clients.serializers import UserSerializer, ReadUserDataSerializer, EmployeeAttendanceSerializer
 
 
 class UserViewSet(ModelViewSet):
@@ -25,6 +26,18 @@ class UserViewSet(ModelViewSet):
             return User.objects.filter(is_safe_deleted=False)
         else:
             return User.objects.filter(id=self.request.user.id)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.is_safe_deleted = True
+        instance.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class EmployeeAttendanceViewSet(ModelViewSet):
+    permission_classes = [DjangoModelPermissions]
+    serializer_class = EmployeeAttendanceSerializer
+    queryset = EmployeeAttendance.objects.filter(is_safe_deleted=False)
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
