@@ -94,6 +94,14 @@ class ReadUserSubscriptionSerializer(serializers.Serializer):
     user = ReadUserDataSerializer()
     start_date = serializers.DateField()
     end_date = serializers.DateField()
+    freezing_days = serializers.IntegerField()
+    payment_method = serializers.CharField()
+    total_amount = serializers.DecimalField(max_digits=6, decimal_places=2)
+    discount_type = serializers.CharField()
+    price_after_discount = serializers.DecimalField(max_digits=6, decimal_places=2)
+    sales_person = ReadUserDataSerializer()
+    comments = serializers.CharField()
+    created_at = serializers.DateTimeField()
 
 
 class FreezingRequestSerializer(serializers.ModelSerializer):
@@ -179,6 +187,15 @@ class WalkInUserSerializer(serializers.ModelSerializer):
     added_by = serializers.HiddenField(
         default=serializers.CurrentUserDefault(),
     )
+
+    class Meta:
+        model = WalkInUser
+        exclude = ("is_safe_deleted",)
+
+
+class ReadWalkInUserSerializer(serializers.ModelSerializer):
+    walk_in_type = ReadWalkInTypeSerializer()
+    added_by = ReadUserDataSerializer()
 
     class Meta:
         model = WalkInUser

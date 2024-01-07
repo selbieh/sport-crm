@@ -1,4 +1,5 @@
-from rest_framework import status
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import status, filters
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import DjangoModelPermissions
 from rest_framework.response import Response
@@ -13,6 +14,8 @@ class LeadViewSet(ModelViewSet):
     permission_classes = [DjangoModelPermissions]
     serializer_class = LeadSerializer
     queryset = Lead.objects.filter(is_safe_deleted=False)
+    filter_backends = [filters.SearchFilter]
+    search_fields = ["first_name", "last_name", 'mobile']
 
     def get_serializer_class(self):
         if self.request.method == "GET":

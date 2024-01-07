@@ -1,5 +1,5 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import status
+from rest_framework import status, filters
 from rest_framework.permissions import DjangoModelPermissions
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -13,8 +13,9 @@ from clients.serializers import UserSerializer, ReadUserDataSerializer, Employee
 class UserViewSet(ModelViewSet):
     permission_classes = [DjangoModelPermissions]
     serializer_class = UserSerializer
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filter_class = UserFilter
+    search_fields = ["id", "first_name", "last_name", 'mobile']
 
     def get_serializer_class(self):
         if self.request.method == "GET":
