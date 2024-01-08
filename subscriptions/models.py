@@ -65,7 +65,10 @@ class Subscription(TimeStampedModel):
         _("price_after_discount"), max_digits=6, decimal_places=2, null=True
     )
     sales_person = models.ForeignKey(
-        User, on_delete=models.PROTECT, related_name="sales_person_subscriptions", null=True
+        User,
+        on_delete=models.PROTECT,
+        related_name="sales_person_subscriptions",
+        null=True,
     )
     comments = models.TextField(null=True, blank=True)
 

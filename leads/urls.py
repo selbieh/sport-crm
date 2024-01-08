@@ -8,5 +8,9 @@ router.register(r"lead", LeadViewSet, basename="leads_api")
 
 urlpatterns = [
     path("", include(router.urls)),
-    path('convert-member/<lead_id>/', ConvertToMemberApi.as_view(), name="convert_lead_to_member_api")
+    path(
+        "convert-member/<lead_id>/",
+        ConvertToMemberApi.as_view(),
+        name="convert_lead_to_member_api",
+    ),
 ]

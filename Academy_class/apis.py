@@ -1,4 +1,5 @@
-from rest_framework import status
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import status, filters
 from rest_framework.permissions import DjangoModelPermissions
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -19,6 +20,21 @@ class AcademyClassViewSet(ModelViewSet):
     queryset = AcademyClass.objects.filter(is_safe_deleted=False).order_by(
         "-created_at"
     )
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = {
+        "instructor_id": ["exact"],
+        "gender": ["exact"],
+        "is_active": ["exact"],
+        "age_group": ["exact"],
+        "maximum_capacity": ["exact"],
+    }
+    search_fields = [
+        "id",
+        "name",
+        "instructor__first_name",
+        "instructor__last_name",
+        "instructor__mobile",
+    ]
 
     def get_serializer_class(self):
         if self.request.method == "GET":
@@ -38,6 +54,9 @@ class ClassSubscriptionViewSet(ModelViewSet):
     queryset = ClassSubscription.objects.filter(is_safe_deleted=False).order_by(
         "-created_at"
     )
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = {"user_id": ["exact"], "academy_class_id": ["exact"]}
+    search_fields = ["id", "user__first_name", "user__last_name", "user__mobile"]
 
     def get_serializer_class(self):
         if self.request.method == "GET":

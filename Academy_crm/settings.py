@@ -53,7 +53,8 @@ INSTALLED_APPS = [
     "subscriptions",
     "Academy_class",
     "leads",
-    "tasks"
+    "tasks",
+    "notifications",
 ]
 
 SITE_ID = 1

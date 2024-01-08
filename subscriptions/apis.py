@@ -24,7 +24,8 @@ from subscriptions.serializers import (
     SubscriptionAttendanceSerializer,
     WalkInTypeSerializer,
     ReadWalkInTypeSerializer,
-    WalkInUserSerializer, ReadWalkInUserSerializer,
+    WalkInUserSerializer,
+    ReadWalkInUserSerializer,
 )
 
 
@@ -36,7 +37,10 @@ class PackagesViewSet(ModelViewSet):
     filterset_fields = {
         "is_active": ["exact"],
     }
-    search_fields = ["id", "name", ]
+    search_fields = [
+        "id",
+        "name",
+    ]
 
     def get_serializer_class(self):
         if self.request.method == "GET":
@@ -55,11 +59,11 @@ class PlanViewSet(ModelViewSet):
     serializer_class = PlanSerializer
     queryset = Plan.objects.filter(is_safe_deleted=False).order_by("-created_at")
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = {
-        "package_id": ["exact"],
-        "duration_type": ["exact"]
-    }
-    search_fields = ["id", "name", ]
+    filterset_fields = {"package_id": ["exact"], "duration_type": ["exact"]}
+    search_fields = [
+        "id",
+        "name",
+    ]
 
     def get_serializer_class(self):
         if self.request.method == "GET":
@@ -80,11 +84,17 @@ class UserSubscriptionViewSet(ModelViewSet):
         "-created_at"
     )
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = {
-        "plan_id": ["exact"]
-    }
-    search_fields = ["id", "user_id", "user__first_name", "user__last_name", "user__mobile", "sales_person__first_name",
-                     "sales_person__last_name", "plan__name"]
+    filterset_fields = {"plan_id": ["exact"]}
+    search_fields = [
+        "id",
+        "user_id",
+        "user__first_name",
+        "user__last_name",
+        "user__mobile",
+        "sales_person__first_name",
+        "sales_person__last_name",
+        "plan__name",
+    ]
 
     def get_serializer_class(self):
         if self.request.method == "GET":
@@ -119,7 +129,10 @@ class WalkInTypeViewSet(ModelViewSet):
     serializer_class = WalkInTypeSerializer
     queryset = WalkInType.objects.filter(is_safe_deleted=False)
     filter_backends = [filters.SearchFilter]
-    search_fields = ["id", "name", ]
+    search_fields = [
+        "id",
+        "name",
+    ]
 
     def get_serializer_class(self):
         if self.request.method == "GET":
@@ -138,12 +151,15 @@ class WalkInUserViewSet(ModelViewSet):
     serializer_class = WalkInUserSerializer
     queryset = WalkInUser.objects.filter(is_safe_deleted=False)
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = {
-        "walk_in_type__id": ["exact"],
-        "added_by__id": ["exact"]
-    }
-    search_fields = ["id", "full_name", "mobile", "added_by__first_name", "added_by__last_name",
-                     "added_by__mobile"]
+    filterset_fields = {"walk_in_type__id": ["exact"], "added_by__id": ["exact"]}
+    search_fields = [
+        "id",
+        "full_name",
+        "mobile",
+        "added_by__first_name",
+        "added_by__last_name",
+        "added_by__mobile",
+    ]
 
     def get_serializer_class(self):
         if self.request.method == "GET":

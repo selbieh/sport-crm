@@ -33,7 +33,7 @@ class ReadLeadSerializer(serializers.Serializer):
 class ConvertLeadToMemberSerializer(UserSerializer):
     def create(self, validated_data):
         user = super().create(validated_data)
-        lead = get_object_or_404(Lead, pk=self.context.get('lead_id'))
+        lead = get_object_or_404(Lead, pk=self.context.get("lead_id"))
         lead.user = user
         lead.save()
         return user

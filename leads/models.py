@@ -11,7 +11,7 @@ from leads.utility import STATUS_CHOICES, NEW, SOURCE_CHOICES
 class Lead(TimeStampedModel):
     first_name = models.CharField(max_length=150, null=False, blank=False)
     last_name = models.CharField(max_length=150, null=False, blank=False)
-    mobile = PhoneNumberField(_("mobile"), null=True, blank=True, unique=True)
+    mobile = PhoneNumberField(_("mobile"), null=False, blank=False, unique=True)
     email = models.EmailField(_("email"), max_length=150, null=True, blank=True)
     gender = models.CharField(_("gender"), max_length=50, default=GENDER_CHOICES)
     assigned_to = models.ForeignKey(
@@ -30,7 +30,9 @@ class Lead(TimeStampedModel):
     source = models.CharField(
         _("lead_source"), max_length=150, choices=SOURCE_CHOICES, null=True, blank=True
     )
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True, related_name="user_lead")
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, null=True, blank=True, related_name="user_lead"
+    )
 
     class Meta:
         verbose_name = _("Lead")

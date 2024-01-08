@@ -7,7 +7,11 @@ from rest_framework.viewsets import ModelViewSet
 
 from clients.models import User
 from leads.models import Lead
-from leads.serializers import LeadSerializer, ReadLeadSerializer, ConvertLeadToMemberSerializer
+from leads.serializers import (
+    LeadSerializer,
+    ReadLeadSerializer,
+    ConvertLeadToMemberSerializer,
+)
 
 
 class LeadViewSet(ModelViewSet):
@@ -15,7 +19,7 @@ class LeadViewSet(ModelViewSet):
     serializer_class = LeadSerializer
     queryset = Lead.objects.filter(is_safe_deleted=False)
     filter_backends = [filters.SearchFilter]
-    search_fields = ["first_name", "last_name", 'mobile']
+    search_fields = ["first_name", "last_name", "mobile"]
 
     def get_serializer_class(self):
         if self.request.method == "GET":

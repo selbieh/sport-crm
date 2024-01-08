@@ -17,8 +17,13 @@ class User(AbstractUser, TimeStampedModel):
     gender = models.CharField(_("gender"), max_length=50, default=GENDER_CHOICES)
     is_whatsapp_verified = models.BooleanField(_("is_mobile_verified"), default=False)
     avatar = models.FileField(upload_to=upload_avatar, blank=True, null=True)
-    referred_by = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True,
-                                    related_name="referred_by_users")
+    referred_by = models.ForeignKey(
+        "self",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="referred_by_users",
+    )
     EMAIL_FIELD = "mobile"
     USERNAME_FIELD = "mobile"
     REQUIRED_FIELDS = ["username"]

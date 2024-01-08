@@ -12,7 +12,16 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["id", "first_name", "last_name", "mobile", "email", "gender", "groups", "referred_by"]
+        fields = [
+            "id",
+            "first_name",
+            "last_name",
+            "mobile",
+            "email",
+            "gender",
+            "groups",
+            "referred_by",
+        ]
 
     def create(self, validated_data):
         user = super().create(validated_data)
@@ -38,7 +47,7 @@ class EmployeeAttendanceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EmployeeAttendance
-        fields = ['employee', 'checkin_time', 'checkout_time']
+        fields = ["employee", "checkin_time", "checkout_time"]
 
     def validate_user(self, value):
         # Check if the requester is an admin

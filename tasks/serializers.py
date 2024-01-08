@@ -7,7 +7,7 @@ from tasks.models import Task
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        exclude = ('is_safe_deleted', )
+        exclude = ("is_safe_deleted",)
 
 
 class ReadTaskSerializer(serializers.Serializer):

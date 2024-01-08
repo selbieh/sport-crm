@@ -1,4 +1,5 @@
-from rest_framework import status
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import status, filters
 from rest_framework.permissions import DjangoModelPermissions
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -10,9 +11,26 @@ from tasks.serializers import TaskSerializer, ReadTaskSerializer
 class TaskViewSet(ModelViewSet):
     permission_classes = [DjangoModelPermissions]
     serializer_class = TaskSerializer
-    queryset = Task.objects.filter(is_safe_deleted=False).order_by(
-        "-created_at"
-    )
+    queryset = Task.objects.filter(is_safe_deleted=False).order_by("-created_at")
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = {
+        "status": ["exact"],
+        "assigned_to_id": ["exact"],
+        "priority": ["exact"],
+    }
+    search_fields = [
+        "id",
+        "title",
+        "assigned_to__first_name",
+        "assigned_to__last_name",
+        "assigned_to__mobile",
+    ]
+
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return Task.objects.filter(is_safe_deleted=False)
+        else:
+            return Task.objects.filter(assigned_to=self.request.user)
 
     def get_serializer_class(self):
         if self.request.method == "GET":

@@ -7,7 +7,11 @@ from rest_framework.viewsets import ModelViewSet
 from clients.filters import UserFilter
 from clients.models import User
 from clients.models.user import EmployeeAttendance
-from clients.serializers import UserSerializer, ReadUserDataSerializer, EmployeeAttendanceSerializer
+from clients.serializers import (
+    UserSerializer,
+    ReadUserDataSerializer,
+    EmployeeAttendanceSerializer,
+)
 
 
 class UserViewSet(ModelViewSet):
@@ -15,7 +19,7 @@ class UserViewSet(ModelViewSet):
     serializer_class = UserSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filter_class = UserFilter
-    search_fields = ["id", "first_name", "last_name", 'mobile']
+    search_fields = ["id", "first_name", "last_name", "mobile"]
 
     def get_serializer_class(self):
         if self.request.method == "GET":
