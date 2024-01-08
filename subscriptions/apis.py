@@ -81,8 +81,7 @@ class UserSubscriptionViewSet(ModelViewSet):
     )
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = {
-        "plan_id": ["exact"],
-        "duration_type": ["exact"]
+        "plan_id": ["exact"]
     }
     search_fields = ["id", "user_id", "user__first_name", "user__last_name", "user__mobile", "sales_person__first_name",
                      "sales_person__last_name", "plan__name"]
