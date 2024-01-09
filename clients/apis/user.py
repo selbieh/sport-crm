@@ -18,7 +18,7 @@ class UserViewSet(ModelViewSet):
     permission_classes = [DjangoModelPermissions]
     serializer_class = UserSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filter_class = UserFilter
+    filterset_class = UserFilter
     search_fields = ["id", "first_name", "last_name", "mobile"]
 
     def get_serializer_class(self):

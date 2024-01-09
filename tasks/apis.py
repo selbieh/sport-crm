@@ -4,6 +4,7 @@ from rest_framework.permissions import DjangoModelPermissions
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
+from tasks.filters import TaskFilter
 from tasks.models import Task
 from tasks.serializers import TaskSerializer, ReadTaskSerializer
 
@@ -13,11 +14,7 @@ class TaskViewSet(ModelViewSet):
     serializer_class = TaskSerializer
     queryset = Task.objects.filter(is_safe_deleted=False).order_by("-created_at")
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = {
-        "status": ["exact"],
-        "assigned_to_id": ["exact"],
-        "priority": ["exact"],
-    }
+    filterset_class = TaskFilter
     search_fields = [
         "id",
         "title",

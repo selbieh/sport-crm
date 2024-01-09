@@ -34,9 +34,7 @@ class PackagesViewSet(ModelViewSet):
     serializer_class = PackagesSerializer
     queryset = Package.objects.filter(is_safe_deleted=False).order_by("-created_at")
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = {
-        "is_active": ["exact"],
-    }
+    filterset_fields = {"is_active": ["exact"]}
     search_fields = [
         "id",
         "name",
@@ -93,6 +91,7 @@ class UserSubscriptionViewSet(ModelViewSet):
         "user__mobile",
         "sales_person__first_name",
         "sales_person__last_name",
+        "sales_person__mobile",
         "plan__name",
     ]
 
@@ -114,6 +113,22 @@ class FreezingRequestViewSet(ModelViewSet):
     queryset = FreezingRequest.objects.filter(is_safe_deleted=False).order_by(
         "-created_at"
     )
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = {
+        "plan_id": ["exact"],
+        "user_id": ["exact"],
+        "requested_by_id": ["exact"],
+    }
+    search_fields = [
+        "id",
+        "user__first_name",
+        "user__last_name",
+        "user__mobile",
+        "requested_by__first_name",
+        "requested_by__last_name",
+        "requested_by__mobile",
+        "plan__name",
+    ]
 
 
 class SubscriptionAttendanceViewSet(ModelViewSet):
@@ -122,6 +137,14 @@ class SubscriptionAttendanceViewSet(ModelViewSet):
     queryset = SubscriptionAttendance.objects.filter(is_safe_deleted=False).order_by(
         "-created_at"
     )
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = {"subscription_id": ["exact"], "user_id": ["exact"]}
+    search_fields = [
+        "id",
+        "user__first_name",
+        "user__last_name",
+        "user__mobile",
+    ]
 
 
 class WalkInTypeViewSet(ModelViewSet):

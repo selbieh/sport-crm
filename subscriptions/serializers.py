@@ -80,7 +80,7 @@ class UserSubscriptionSerializer(serializers.ModelSerializer):
         return instance
 
     def update(self, instance, validated_data):
-        instance = super().update(validated_data)
+        instance = super().update(instance, validated_data)
         instance.end_date = instance.start_date + timedelta(
             days=instance.plan.number_of_duration_days
         )

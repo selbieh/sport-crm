@@ -89,7 +89,7 @@ class Subscription(TimeStampedModel):
 
 class FreezingRequest(TimeStampedModel):
     user = models.ForeignKey(
-        User, on_delete=models.PROTECT, related_name="user_freezing_requests"
+        User, on_delete=models.PROTECT, related_name="user_freezing_requests", null=True
     )
     plan = models.ForeignKey(
         Plan, on_delete=models.PROTECT, related_name="plan_freezing_requests", null=True

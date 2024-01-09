@@ -11,8 +11,9 @@ class GroupSerializer(serializers.ModelSerializer):
         group_name = validated_data["name"]
         group, created = Group.objects.get_or_create(name=group_name)
         if created:
-            permissions = validated_data.get("permissions")
-            group.permissions.add(*permissions)
+            permissions = validated_data.get("permissions", None)
+            if permissions:
+                group.permissions.add(*permissions)
         return group
 
 
