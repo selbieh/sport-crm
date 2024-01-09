@@ -51,6 +51,7 @@ class ConvertLeadToMemberSerializer(UserSubscriptionSerializer):
             last_name=lead.last_name,
             mobile=lead.mobile,
             gender=lead.gender,
+            referred_by=lead.assigned_to
         )
         lead_user.set_password(generate_random_password())
         lead_user.save()
