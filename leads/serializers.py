@@ -38,7 +38,6 @@ class ReadLeadSerializer(serializers.Serializer):
 
 
 class ConvertLeadToMemberSerializer(UserSubscriptionSerializer):
-
     class Meta:
         model = Subscription
         exclude = ("user", "end_date", "is_safe_deleted", "freezing_days")
@@ -51,7 +50,7 @@ class ConvertLeadToMemberSerializer(UserSubscriptionSerializer):
             first_name=lead.first_name,
             last_name=lead.last_name,
             mobile=lead.mobile,
-            gender=lead.gender
+            gender=lead.gender,
         )
         lead_user.set_password(generate_random_password())
         lead_user.save()
