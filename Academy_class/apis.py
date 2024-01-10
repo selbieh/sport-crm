@@ -34,6 +34,13 @@ class AcademyClassViewSet(ModelViewSet):
         "instructor__mobile",
     ]
 
+    def get_queryset(self):
+        date = self.request.query_params.get('date', None)
+        if date:
+            queryset = self.queryset.filter(created_at__date=date)
+            return self.filter_queryset(queryset)
+        return self.filter_queryset(self.queryset)
+
     def get_serializer_class(self):
         if self.request.method == "GET":
             return ReadAcademyClassSerializer

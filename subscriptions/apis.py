@@ -82,10 +82,9 @@ class UserSubscriptionViewSet(ModelViewSet):
         "-created_at"
     )
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = {"plan_id": ["exact"]}
+    filterset_fields = {"plan_id": ["exact"], "user_id": ["exact"]}
     search_fields = [
         "id",
-        "user_id",
         "user__first_name",
         "user__last_name",
         "user__mobile",
