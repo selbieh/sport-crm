@@ -12,7 +12,7 @@ class Lead(TimeStampedModel):
     first_name = models.CharField(max_length=150, null=False, blank=False)
     last_name = models.CharField(max_length=150, null=False, blank=False)
     mobile = PhoneNumberField(_("mobile"), null=False, blank=False, unique=True)
-    email = models.EmailField(_("email"), max_length=150, null=True, blank=True)
+    email = models.EmailField(_("email"), max_length=150, null=False, unique=True)
     gender = models.CharField(_("gender"), max_length=50, default=GENDER_CHOICES)
     assigned_to = models.ForeignKey(
         User, on_delete=models.PROTECT, related_name="assigned_to_leads"

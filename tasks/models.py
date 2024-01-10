@@ -8,12 +8,14 @@ from tasks.utility import NEW, STATUS_CHOICES, PRIORITY_CHOICES
 class Task(TimeStampedModel):
     title = models.CharField(max_length=255, null=False, blank=False)
     details = models.TextField(null=True, blank=True)
+    created_by = models.ForeignKey(
+        User, on_delete=models.PROTECT, related_name="created_by_tasks", null=True
+    )
     assigned_to = models.ForeignKey(
         User,
         on_delete=models.PROTECT,
-        related_name="assigned_tasks",
+        related_name="assigned_to_tasks",
         null=True,
-        blank=True,
     )
     deadline = models.DateField(null=False)
     reminder_intervals = models.CharField(max_length=150, null=True, blank=True)

@@ -3,6 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from clients.models import TimeStampedModel, User
 from clients.utility import GENDER_CHOICES
 from Academy_class.utility import MALE
+from subscriptions.models import Subscription
 
 
 # Create your models here.
@@ -26,34 +27,41 @@ class AcademyClass(TimeStampedModel):
         verbose_name_plural = _("Academy Classes")
 
 
-class ClassSubscription(TimeStampedModel):
-    user = models.ForeignKey(
-        User, on_delete=models.PROTECT, related_name="user_class_subscriptions"
-    )
-    academy_class = models.ForeignKey(
-        AcademyClass,
-        on_delete=models.PROTECT,
-        related_name="academy_class_subscriptions",
-        null=True,
-    )
-    start_date = models.DateField(auto_now_add=True)
-    end_date = models.DateField(null=True)
-
-    class Meta:
-        verbose_name = _("Class Subscription")
-        verbose_name_plural = _("Class Subscriptions")
+# class ClassSubscription(TimeStampedModel):
+#     user = models.ForeignKey(
+#         User, on_delete=models.PROTECT, related_name="user_class_subscriptions"
+#     )
+#     academy_class = models.ForeignKey(
+#         AcademyClass,
+#         on_delete=models.PROTECT,
+#         related_name="academy_class_subscriptions",
+#         null=True,
+#     )
+#     start_date = models.DateField(auto_now_add=True)
+#     end_date = models.DateField(null=True)
+#
+#     class Meta:
+#         verbose_name = _("Class Subscription")
+#         verbose_name_plural = _("Class Subscriptions")
 
 
 class ClassAttendance(TimeStampedModel):
     subscription = models.ForeignKey(
-        ClassSubscription,
+        Subscription,
         on_delete=models.PROTECT,
         related_name="class_subscription_attendances",
+    )
+    academy_class = models.ForeignKey(
+        AcademyClass,
+        on_delete=models.PROTECT,
+        related_name="academy_class_attendance",
+        null=True,
     )
     user = models.ForeignKey(
         User, on_delete=models.PROTECT, related_name="user_class_attendances"
     )
-    is_attended = models.BooleanField(default=False)
+    checkin_time = models.TimeField(null=True)
+    checkout_time = models.TimeField(null=True)
 
     class Meta:
         verbose_name = _("Class Attendance")

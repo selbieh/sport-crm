@@ -9,7 +9,7 @@ from clients.utility import upload_avatar, GENDER_CHOICES, ROLE_CHOICES, CUSTOME
 
 class User(AbstractUser, TimeStampedModel):
     username = models.CharField(_("username"), max_length=150, null=True, blank=True)
-    email = models.EmailField(_("email"), max_length=150, null=True, blank=True)
+    email = models.EmailField(_("email"), max_length=150, null=False, unique=True)
     mobile = PhoneNumberField(_("mobile"), blank=False, null=False, unique=True)
     whatsapp_number = PhoneNumberField(
         _("whatsapp_number"), null=True, blank=True, unique=True
@@ -17,13 +17,6 @@ class User(AbstractUser, TimeStampedModel):
     gender = models.CharField(_("gender"), max_length=50, default=GENDER_CHOICES)
     is_whatsapp_verified = models.BooleanField(_("is_mobile_verified"), default=False)
     avatar = models.FileField(upload_to=upload_avatar, blank=True, null=True)
-    referred_by = models.ForeignKey(
-        "self",
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-        related_name="referred_by_users",
-    )
     EMAIL_FIELD = "mobile"
     USERNAME_FIELD = "mobile"
     REQUIRED_FIELDS = ["username"]

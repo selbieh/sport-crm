@@ -14,6 +14,7 @@ class ReadTaskSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     title = serializers.CharField()
     details = serializers.CharField()
+    created_by = ReadUserDataSerializer()
     assigned_to = ReadUserDataSerializer()
     deadline = serializers.DateField()
     reminder_intervals = serializers.CharField()

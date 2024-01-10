@@ -63,7 +63,7 @@ class ReadPlanSerializer(serializers.Serializer):
 
 
 class UserSubscriptionSerializer(serializers.ModelSerializer):
-    sales_person = serializers.HiddenField(
+    added_by = serializers.HiddenField(
         default=serializers.CurrentUserDefault(),
     )
 
@@ -92,12 +92,14 @@ class ReadUserSubscriptionSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     plan = ReadPlanSerializer()
     user = ReadUserDataSerializer()
+    added_by = ReadUserDataSerializer()
     start_date = serializers.DateField()
     end_date = serializers.DateField()
     freezing_days = serializers.IntegerField()
     payment_method = serializers.CharField()
     total_amount = serializers.DecimalField(max_digits=6, decimal_places=2)
     discount_type = serializers.CharField()
+    discount = serializers.FloatField()
     price_after_discount = serializers.DecimalField(max_digits=6, decimal_places=2)
     sales_person = ReadUserDataSerializer()
     comments = serializers.CharField()
@@ -200,3 +202,17 @@ class ReadWalkInUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = WalkInUser
         exclude = ("is_safe_deleted",)
+
+
+class UserProfileSubscriptionsSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    plan = ReadPlanSerializer()
+    start_date = serializers.DateField()
+    end_date = serializers.DateField()
+    freezing_days = serializers.IntegerField()
+
+
+class UserProfileSerializer(ReadUserDataSerializer):
+    avatar = serializers.ImageField()
+    subscriptions = UserProfileSubscriptionsSerializer(many=True)
+    # user_class_attendances  = pass

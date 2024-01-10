@@ -11,6 +11,4 @@ class UserFilter(FilterSet):
 
     class Meta:
         model = User
-        fields = [
-            "group",
-        ]
+        fields = ["group", "excluded_group", "is_active"]

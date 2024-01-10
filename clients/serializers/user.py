@@ -20,7 +20,6 @@ class UserSerializer(serializers.ModelSerializer):
             "email",
             "gender",
             "groups",
-            "referred_by",
         ]
 
     def create(self, validated_data):
@@ -37,6 +36,7 @@ class ReadUserDataSerializer(serializers.Serializer):
     mobile = PhoneNumberField()
     email = serializers.EmailField()
     gender = serializers.CharField()
+    is_active = serializers.BooleanField()
     groups = ReadGroupsSerializer(many=True)
 
 

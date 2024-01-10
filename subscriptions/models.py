@@ -49,6 +49,9 @@ class Subscription(TimeStampedModel):
     plan = models.ForeignKey(
         Plan, on_delete=models.PROTECT, related_name="subscriptions"
     )
+    added_by = models.ForeignKey(
+        User, on_delete=models.PROTECT, related_name="added_by_subscriptions", null=True
+    )
     start_date = models.DateField(auto_now_add=True)
     end_date = models.DateField(null=True)
     freezing_days = models.IntegerField(default=False)
@@ -61,6 +64,7 @@ class Subscription(TimeStampedModel):
     discount_type = models.CharField(
         _("discount_type"), max_length=150, null=True, blank=True
     )
+    discount = models.FloatField(_("discount"), null=True, blank=True)
     price_after_discount = models.DecimalField(
         _("price_after_discount"), max_digits=6, decimal_places=2, null=True
     )
@@ -158,6 +162,7 @@ class WalkInUser(TimeStampedModel):
     discount_type = models.CharField(
         _("discount_type"), max_length=150, null=True, blank=True
     )
+    discount = models.FloatField(_("discount"), null=True, blank=True)
     price_after_discount = models.DecimalField(
         _("price_after_discount"), max_digits=6, decimal_places=2
     )

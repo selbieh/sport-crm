@@ -7,6 +7,7 @@ from clients.apis import (
     UserViewSet,
     ChangePasswordApi,
     EmployeeAttendanceViewSet,
+    MemberProfileApi,
 )
 
 router = DefaultRouter()
@@ -24,4 +25,5 @@ urlpatterns = [
     path(
         "change-password/<int:pk>/", ChangePasswordApi.as_view(), name="change_password"
     ),
+    path("member/profile/", MemberProfileApi.as_view(), name="member_profile_api"),
 ]

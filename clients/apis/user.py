@@ -3,6 +3,7 @@ from rest_framework import status, filters
 from rest_framework.permissions import DjangoModelPermissions
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.generics import RetrieveAPIView
 
 from clients.filters import UserFilter
 from clients.models import User
@@ -12,6 +13,7 @@ from clients.serializers import (
     ReadUserDataSerializer,
     EmployeeAttendanceSerializer,
 )
+from subscriptions.serializers import UserProfileSerializer
 
 
 class UserViewSet(ModelViewSet):
@@ -49,3 +51,14 @@ class EmployeeAttendanceViewSet(ModelViewSet):
         instance.is_safe_deleted = True
         instance.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class MemberProfileApi(RetrieveAPIView):
+    permission_classes = [DjangoModelPermissions]
+    serializer_class = UserProfileSerializer
+    queryset = User.objects.all().prefetch_related(
+        "subscriptions", "user_class_attendances"
+    )
+
+    def get_object(self):
+        return self.request.user

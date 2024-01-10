@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+from django.contrib.auth.models import Group
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from phonenumber_field.serializerfields import PhoneNumberField
@@ -9,6 +10,7 @@ from clients.models import User
 from clients.serializers import ReadUserDataSerializer, UserSerializer
 from clients.utility import generate_random_password
 from leads.models import Lead
+from leads.utility import CONTACTED
 from subscriptions.models import Subscription
 from subscriptions.serializers import UserSubscriptionSerializer
 
@@ -51,11 +53,13 @@ class ConvertLeadToMemberSerializer(UserSubscriptionSerializer):
             last_name=lead.last_name,
             mobile=lead.mobile,
             gender=lead.gender,
-            referred_by=lead.assigned_to
         )
+        member, _ = Group.objects.get_or_create(name="Member")
+        lead_user.groups.add(member)
         lead_user.set_password(generate_random_password())
         lead_user.save()
         lead.user = lead_user
+        lead.status = CONTACTED
         lead.save()
         return lead_user
 
