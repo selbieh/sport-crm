@@ -125,12 +125,16 @@ class FreezingRequestSerializer(serializers.ModelSerializer):
         return attrs
 
     def validate_user(self, value):
-        # Check if the requester is an admin
         if self.context["request"].user.is_superuser:
-            # If admin, use the user from the request
-            request_body_user = self.context["request"].data.get("user")
-            print(request_body_user)
-            return User.objects.get(pk=request_body_user)
+            # If admin, use the user from the request data
+            request_body_user = self.initial_data.get('user')
+            if request_body_user is not None:
+                try:
+                    return User.objects.get(pk=request_body_user)
+                except User.DoesNotExist:
+                    raise serializers.ValidationError("User not found.")
+            else:
+                raise serializers.ValidationError("User field is required for admin.")
         else:
             # If not admin, use the default user
             return value
