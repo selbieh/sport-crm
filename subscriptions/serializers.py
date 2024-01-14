@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 from Academy_class.serializers import ReadAcademyClassSerializer
 from clients.models import User
-from clients.serializers import ReadUserDataSerializer
+from clients.serializers import ReadUserDataSerializer, ReadGroupsSerializer
 from subscriptions.models import (
     Package,
     Plan,
@@ -246,5 +246,6 @@ class ReadUserClassProfile(serializers.Serializer):
 
 class UserProfileSerializer(ReadUserDataSerializer):
     avatar = serializers.ImageField()
+    groups = ReadGroupsSerializer(many=True)
     subscriptions = UserProfileSubscriptionsSerializer(many=True)
     user_class_attendances = ReadUserClassProfile(many=True, allow_null=True)

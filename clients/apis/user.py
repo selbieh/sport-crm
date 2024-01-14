@@ -10,8 +10,7 @@ from clients.models import User
 from clients.models.user import EmployeeAttendance
 from clients.serializers import (
     UserSerializer,
-    ReadUserDataSerializer,
-    EmployeeAttendanceSerializer,
+    EmployeeAttendanceSerializer, ReadUserSerializer,
 )
 from subscriptions.serializers import UserProfileSerializer
 
@@ -25,7 +24,7 @@ class UserViewSet(ModelViewSet):
 
     def get_serializer_class(self):
         if self.request.method == "GET":
-            return ReadUserDataSerializer
+            return ReadUserSerializer
         return UserSerializer
 
     def get_queryset(self):

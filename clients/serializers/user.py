@@ -39,6 +39,10 @@ class ReadUserDataSerializer(serializers.Serializer):
     email = serializers.EmailField()
     gender = serializers.CharField()
     is_active = serializers.BooleanField()
+
+
+class ReadUserSerializer(ReadUserDataSerializer):
+    avatar = serializers.ImageField()
     groups = ReadGroupsSerializer(many=True)
 
 

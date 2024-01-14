@@ -3,6 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
 from clients.models import User
+from clients.serializers import ReadGroupsSerializer
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -20,7 +21,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         if not user.is_whatsapp_verified:
             raise serializers.ValidationError("user is not verified")
         data = super(MyTokenObtainPairSerializer, self).validate(attrs)
-        data["groups"] = user.groups.values_list("name", flat=True)
+        data["groups"] = ReadGroupsSerializer(user.groups.all(), many=True).data
         data["admin"] = user.is_superuser
         data["user_id"] = user.id
         data["name"] = user.get_full_name()
