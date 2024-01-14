@@ -62,3 +62,11 @@ class MemberProfileApi(RetrieveAPIView):
 
     def get_object(self):
         return self.request.user
+
+
+class GetMemberProfileByIdApi(RetrieveAPIView):
+    permission_classes = [DjangoModelPermissions]
+    serializer_class = UserProfileSerializer
+    queryset = User.objects.all().prefetch_related(
+        "subscriptions", "user_class_attendances"
+    )

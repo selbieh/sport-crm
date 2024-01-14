@@ -2,6 +2,7 @@ from datetime import timedelta
 
 from rest_framework import serializers
 
+from Academy_class.serializers import ReadAcademyClassSerializer
 from clients.models import User
 from clients.serializers import ReadUserDataSerializer
 from subscriptions.models import (
@@ -140,14 +141,29 @@ class FreezingRequestSerializer(serializers.ModelSerializer):
             return value
 
     def create(self, validated_data):
-        freezing_request = super().create(validated_data)
-        user_subscription = Subscription.objects.get(
-            user=freezing_request.user, plan=freezing_request.plan
-        )
-        user_subscription.end_date += timedelta(days=freezing_request.duration)
-        user_subscription.freezing_days += freezing_request.duration
-        user_subscription.save()
-        return freezing_request
+
+        try:
+            freezing_request = super().create(validated_data)
+            user_subscription = Subscription.objects.get(
+                user=freezing_request.user, plan=freezing_request.plan
+            )
+            user_subscription.end_date += timedelta(days=freezing_request.duration)
+            user_subscription.freezing_days += freezing_request.duration
+            user_subscription.save()
+            return freezing_request
+        except Subscription.DoesNotExist:
+            raise serializers.ValidationError("User not have subscription to add freezing requests.")
+
+
+class ReadFreezingRequestsSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    user = ReadUserDataSerializer()
+    plan = ReadPlanSerializer()
+    requested_by = ReadUserDataSerializer()
+    duration = serializers.IntegerField()
+    start_date = serializers.DateField()
+    end_date = serializers.DateField()
+    created_at = serializers.DateTimeField()
 
 
 class SubscriptionAttendanceSerializer(serializers.ModelSerializer):
@@ -162,11 +178,16 @@ class SubscriptionAttendanceSerializer(serializers.ModelSerializer):
         ]
 
     def validate_user(self, value):
-        # Check if the requester is an admin
         if self.context["request"].user.is_superuser:
-            # If admin, use the user from the request
-            request_body_user = self.context["request"].data.get("user")
-            return User.objects.get(pk=request_body_user)
+            # If admin, use the user from the request data
+            request_body_user = self.initial_data.get('user')
+            if request_body_user is not None:
+                try:
+                    return User.objects.get(pk=request_body_user)
+                except User.DoesNotExist:
+                    raise serializers.ValidationError("User not found.")
+            else:
+                raise serializers.ValidationError("User field is required for admin.")
         else:
             # If not admin, use the default user
             return value
@@ -216,7 +237,14 @@ class UserProfileSubscriptionsSerializer(serializers.Serializer):
     freezing_days = serializers.IntegerField()
 
 
+class ReadUserClassProfile(serializers.Serializer):
+    id = serializers.IntegerField()
+    academy_class = ReadAcademyClassSerializer()
+    subscription = UserProfileSubscriptionsSerializer()
+    created_at = serializers.DateTimeField()
+
+
 class UserProfileSerializer(ReadUserDataSerializer):
     avatar = serializers.ImageField()
     subscriptions = UserProfileSubscriptionsSerializer(many=True)
-    # user_class_attendances  = pass
+    user_class_attendances = ReadUserClassProfile(many=True, allow_null=True)

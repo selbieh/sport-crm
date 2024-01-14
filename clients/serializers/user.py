@@ -4,11 +4,12 @@ from rest_framework import serializers
 from clients.models import User
 from clients.models.user import EmployeeAttendance
 from clients.serializers import ReadGroupsSerializer
-from clients.utility import generate_random_password
+from clients.utility import generate_random_password, Base64ImageField
 
 
 class UserSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
+    avatar = Base64ImageField(required=False)
 
     class Meta:
         model = User
@@ -20,6 +21,7 @@ class UserSerializer(serializers.ModelSerializer):
             "email",
             "gender",
             "groups",
+            "avatar",
         ]
 
     def create(self, validated_data):

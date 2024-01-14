@@ -25,7 +25,7 @@ from subscriptions.serializers import (
     WalkInTypeSerializer,
     ReadWalkInTypeSerializer,
     WalkInUserSerializer,
-    ReadWalkInUserSerializer,
+    ReadWalkInUserSerializer, ReadFreezingRequestsSerializer,
 )
 
 
@@ -128,6 +128,11 @@ class FreezingRequestViewSet(ModelViewSet):
         "requested_by__mobile",
         "plan__name",
     ]
+
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return ReadFreezingRequestsSerializer
+        return FreezingRequestSerializer
 
 
 class SubscriptionAttendanceViewSet(ModelViewSet):
