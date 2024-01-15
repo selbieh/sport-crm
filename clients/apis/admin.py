@@ -23,6 +23,6 @@ class RolesViewSet(ModelViewSet):
 
 
 class ListPermissionsApi(ListAPIView):
-    # permission_classes = [IsAuthenticated, IsSystemAdmin]
+    permission_classes = [IsAuthenticated, IsSystemAdmin]
     queryset = Permission.objects.all()
     serializer_class = ReadPermissionSerializer
