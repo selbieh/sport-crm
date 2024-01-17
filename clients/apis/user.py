@@ -10,7 +10,8 @@ from clients.models import User
 from clients.models.user import EmployeeAttendance
 from clients.serializers import (
     UserSerializer,
-    EmployeeAttendanceSerializer, ReadUserSerializer,
+    EmployeeAttendanceSerializer,
+    ReadUserSerializer,
 )
 from subscriptions.serializers import UserProfileSerializer
 

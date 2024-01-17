@@ -128,7 +128,7 @@ class FreezingRequestSerializer(serializers.ModelSerializer):
     def validate_user(self, value):
         if self.context["request"].user.is_superuser:
             # If admin, use the user from the request data
-            request_body_user = self.initial_data.get('user')
+            request_body_user = self.initial_data.get("user")
             if request_body_user is not None:
                 try:
                     return User.objects.get(pk=request_body_user)
@@ -141,7 +141,6 @@ class FreezingRequestSerializer(serializers.ModelSerializer):
             return value
 
     def create(self, validated_data):
-
         try:
             freezing_request = super().create(validated_data)
             user_subscription = Subscription.objects.get(
@@ -152,7 +151,9 @@ class FreezingRequestSerializer(serializers.ModelSerializer):
             user_subscription.save()
             return freezing_request
         except Subscription.DoesNotExist:
-            raise serializers.ValidationError("User not have subscription to add freezing requests.")
+            raise serializers.ValidationError(
+                "User not have subscription to add freezing requests."
+            )
 
 
 class ReadFreezingRequestsSerializer(serializers.Serializer):
@@ -180,7 +181,7 @@ class SubscriptionAttendanceSerializer(serializers.ModelSerializer):
     def validate_user(self, value):
         if self.context["request"].user.is_superuser:
             # If admin, use the user from the request data
-            request_body_user = self.initial_data.get('user')
+            request_body_user = self.initial_data.get("user")
             if request_body_user is not None:
                 try:
                     return User.objects.get(pk=request_body_user)

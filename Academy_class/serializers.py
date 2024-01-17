@@ -40,7 +40,7 @@ class ClassAttendanceSerializer(serializers.ModelSerializer):
     def validate_user(self, value):
         if self.context["request"].user.is_superuser:
             # If admin, use the user from the request data
-            request_body_user = self.initial_data.get('user')
+            request_body_user = self.initial_data.get("user")
             if request_body_user is not None:
                 try:
                     return User.objects.get(pk=request_body_user)
@@ -51,4 +51,3 @@ class ClassAttendanceSerializer(serializers.ModelSerializer):
         else:
             # If not admin, use the default user
             return value
-

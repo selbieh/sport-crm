@@ -14,8 +14,8 @@ class Command(BaseCommand):
             group, created = Group.objects.get_or_create(name=item)
             permissions = Permission.objects.all()
             if created:
-                if group.name == "Admin":
-                    group.permissions.add(*permissions)
                 self.stdout.write(self.style.SUCCESS("group created successfully"))
             else:
+                if group.name == "Admin":
+                    group.permissions.add(*permissions)
                 self.stdout.write(self.style.SUCCESS("group already exists"))

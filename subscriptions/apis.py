@@ -25,7 +25,8 @@ from subscriptions.serializers import (
     WalkInTypeSerializer,
     ReadWalkInTypeSerializer,
     WalkInUserSerializer,
-    ReadWalkInUserSerializer, ReadFreezingRequestsSerializer,
+    ReadWalkInUserSerializer,
+    ReadFreezingRequestsSerializer,
 )
 
 
@@ -57,7 +58,11 @@ class PlanViewSet(ModelViewSet):
     serializer_class = PlanSerializer
     queryset = Plan.objects.filter(is_safe_deleted=False).order_by("-created_at")
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = {"package_id": ["exact"], "duration_type": ["exact"]}
+    filterset_fields = {
+        "package_id": ["exact"],
+        "duration_type": ["exact"],
+        "duration_type": ["exact"],
+    }
     search_fields = [
         "id",
         "name",
@@ -82,7 +87,12 @@ class UserSubscriptionViewSet(ModelViewSet):
         "-created_at"
     )
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = {"plan_id": ["exact"], "user_id": ["exact"]}
+    filterset_fields = {
+        "plan_id": ["exact"],
+        "user_id": ["exact"],
+        "sales_person__id": ["exact"],
+        "plan__duration_type": ["exact"],
+    }
     search_fields = [
         "id",
         "user__first_name",

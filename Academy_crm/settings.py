@@ -107,9 +107,7 @@ AUTH_USER_MODEL = "clients.User"
 # }
 DATABASES = {
     "default": {
-        "ENGINE": env(
-            "SQL_ENGINE"
-        ),
+        "ENGINE": env("SQL_ENGINE"),
         "NAME": env("SQL_DATABASE"),
         "USER": env("SQL_USER"),
         "PASSWORD": env("SQL_PASSWORD"),

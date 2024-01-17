@@ -18,8 +18,24 @@ class LeadViewSet(ModelViewSet):
     permission_classes = [DjangoModelPermissions]
     serializer_class = LeadSerializer
     queryset = Lead.objects.filter(is_safe_deleted=False)
-    filter_backends = [filters.SearchFilter]
-    search_fields = ["first_name", "last_name", "mobile"]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = {
+        "status": ["exact"],
+        "assigned_to__id": ["exact"],
+        "source": ["exact"],
+        "user__id": ["exact"],
+    }
+    search_fields = [
+        "first_name",
+        "last_name",
+        "mobile",
+        "email",
+        "assigned_to__first_name",
+        "assigned_to__last_name",
+        "assigned_to__last_name",
+        "assigned_to__mobile",
+        "assigned_to__email",
+    ]
 
     def get_serializer_class(self):
         if self.request.method == "GET":

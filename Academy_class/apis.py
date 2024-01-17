@@ -35,7 +35,7 @@ class AcademyClassViewSet(ModelViewSet):
     ]
 
     def get_queryset(self):
-        date = self.request.query_params.get('date', None)
+        date = self.request.query_params.get("date", None)
         if date:
             queryset = self.queryset.filter(created_at__date=date)
             return self.filter_queryset(queryset)

@@ -21,6 +21,9 @@ class TaskViewSet(ModelViewSet):
         "assigned_to__first_name",
         "assigned_to__last_name",
         "assigned_to__mobile",
+        "created_by__first_name",
+        "created_by__last_name",
+        "created_by__mobile",
     ]
 
     def get_queryset(self):
