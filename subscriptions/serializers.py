@@ -53,6 +53,7 @@ class PlanSerializer(serializers.ModelSerializer):
 
 class ReadPlanSerializer(serializers.Serializer):
     id = serializers.IntegerField()
+    package = ReadPackageSerializer()
     name = serializers.CharField()
     price = serializers.DecimalField(max_digits=6, decimal_places=2)
     duration_type = serializers.CharField()

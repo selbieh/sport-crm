@@ -61,11 +61,12 @@ class PlanViewSet(ModelViewSet):
     filterset_fields = {
         "package_id": ["exact"],
         "duration_type": ["exact"],
-        "duration_type": ["exact"],
+        "package__name": ["exact"],
     }
     search_fields = [
         "id",
         "name",
+        "package__name"
     ]
 
     def get_serializer_class(self):
