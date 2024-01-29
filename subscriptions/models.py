@@ -20,7 +20,7 @@ class Package(TimeStampedModel):
 class Plan(TimeStampedModel):
     package = models.ForeignKey(Package, on_delete=models.PROTECT, related_name="plans")
     name = models.CharField(max_length=150, null=False, blank=False)
-    price = models.DecimalField(max_digits=6, decimal_places=2)
+    price = models.DecimalField(max_digits=10, decimal_places=3)
     duration_type = models.CharField(
         max_length=50, choices=DURATION_TYPE_CHOICES, default=DAYS
     )
@@ -59,14 +59,14 @@ class Subscription(TimeStampedModel):
         _("payment_method"), max_length=255, null=True, blank=True
     )
     total_amount = models.DecimalField(
-        _("total_amount"), max_digits=6, decimal_places=2, null=True
+        _("total_amount"), max_digits=10, decimal_places=3, null=True
     )
     discount_type = models.CharField(
         _("discount_type"), max_length=150, null=True, blank=True
     )
     discount = models.FloatField(_("discount"), null=True, blank=True)
     price_after_discount = models.DecimalField(
-        _("price_after_discount"), max_digits=6, decimal_places=2, null=True
+        _("price_after_discount"), max_digits=10, decimal_places=3, null=True
     )
     sales_person = models.ForeignKey(
         User,
@@ -135,7 +135,7 @@ class SubscriptionAttendance(TimeStampedModel):
 class WalkInType(TimeStampedModel):
     name = models.CharField(_("name"), max_length=155, null=False, blank=False)
     description = models.TextField(_("description"), null=True, blank=True)
-    price = models.DecimalField(_("price"), max_digits=6, decimal_places=2)
+    price = models.DecimalField(_("price"), max_digits=10, decimal_places=3)
 
     class Meta:
         verbose_name = _("WalkIn Type")
@@ -157,14 +157,14 @@ class WalkInUser(TimeStampedModel):
         _("payment_method"), max_length=255, null=True, blank=True
     )
     total_amount = models.DecimalField(
-        _("total_amount"), max_digits=6, decimal_places=2
+        _("total_amount"), max_digits=10, decimal_places=3
     )
     discount_type = models.CharField(
         _("discount_type"), max_length=150, null=True, blank=True
     )
     discount = models.FloatField(_("discount"), null=True, blank=True)
     price_after_discount = models.DecimalField(
-        _("price_after_discount"), max_digits=6, decimal_places=2
+        _("price_after_discount"), max_digits=10, decimal_places=3
     )
     notes = models.TextField(_("notes"), null=True, blank=True)
 
