@@ -63,11 +63,7 @@ class PlanViewSet(ModelViewSet):
         "duration_type": ["exact"],
         "package__name": ["exact"],
     }
-    search_fields = [
-        "id",
-        "name",
-        "package__name"
-    ]
+    search_fields = ["id", "name", "package__name"]
 
     def get_serializer_class(self):
         if self.request.method == "GET":

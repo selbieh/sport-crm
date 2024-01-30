@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from clients.models import TimeStampedModel, User
 from clients.utility import GENDER_CHOICES
 from Academy_class.utility import MALE
-from subscriptions.models import Subscription
+from subscriptions.models import Subscription, WalkInUser
 
 
 # Create your models here.
@@ -50,6 +50,7 @@ class ClassAttendance(TimeStampedModel):
         Subscription,
         on_delete=models.PROTECT,
         related_name="class_subscription_attendances",
+        null=True,
     )
     academy_class = models.ForeignKey(
         AcademyClass,
@@ -58,7 +59,13 @@ class ClassAttendance(TimeStampedModel):
         null=True,
     )
     user = models.ForeignKey(
-        User, on_delete=models.PROTECT, related_name="user_class_attendances"
+        User, on_delete=models.PROTECT, related_name="user_class_attendances", null=True
+    )
+    walk_in_user = models.ForeignKey(
+        WalkInUser,
+        on_delete=models.PROTECT,
+        related_name="walk_in_user_class_attendance",
+        null=True,
     )
     checkin_time = models.TimeField(null=True)
     checkout_time = models.TimeField(null=True)
@@ -66,3 +73,13 @@ class ClassAttendance(TimeStampedModel):
     class Meta:
         verbose_name = _("Class Attendance")
         verbose_name_plural = _("Class Attendance")
+
+    def save(
+        self, force_insert=False, force_update=False, using=None, update_fields=None
+    ):
+        if self.subscription:
+            self.subscription.plan.number_of_sessions -= 1
+            self.subscription.plan.save()
+        super(ClassAttendance, self).save(
+            force_insert=False, force_update=False, using=None, update_fields=None
+        )

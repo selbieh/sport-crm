@@ -74,6 +74,9 @@ class Subscription(TimeStampedModel):
         related_name="sales_person_subscriptions",
         null=True,
     )
+    refunded_amount = models.DecimalField(
+        _("refunded_amount"), max_digits=10, decimal_places=3, null=True
+    )
     comments = models.TextField(null=True, blank=True)
 
     class Meta:
@@ -144,7 +147,13 @@ class WalkInType(TimeStampedModel):
 
 class WalkInUser(TimeStampedModel):
     walk_in_type = models.ForeignKey(
-        WalkInType, on_delete=models.PROTECT, related_name="walk_in_users"
+        WalkInType, on_delete=models.PROTECT, related_name="walk_in_users", null=True
+    )
+    academy_class = models.ForeignKey(
+        "Academy_class.AcademyClass",
+        on_delete=models.PROTECT,
+        related_name="academy_class_walk_in_users",
+        null=True,
     )
     full_name = models.CharField(
         _("full_name"), max_length=255, null=False, blank=False

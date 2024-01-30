@@ -2,6 +2,7 @@ from datetime import timedelta
 
 from rest_framework import serializers
 
+from Academy_class.models import ClassAttendance
 from Academy_class.serializers import ReadAcademyClassSerializer
 from clients.models import User
 from clients.serializers import ReadUserDataSerializer, ReadGroupsSerializer
@@ -103,6 +104,7 @@ class ReadUserSubscriptionSerializer(serializers.Serializer):
     discount_type = serializers.CharField()
     discount = serializers.FloatField()
     price_after_discount = serializers.DecimalField(max_digits=10, decimal_places=3)
+    refunded_amount = serializers.DecimalField(max_digits=10, decimal_places=3)
     sales_person = ReadUserDataSerializer()
     comments = serializers.CharField()
     created_at = serializers.DateTimeField()
@@ -220,6 +222,16 @@ class WalkInUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = WalkInUser
         exclude = ("is_safe_deleted",)
+
+    def create(self, validated_data):
+        walk_in_user = super().create(validated_data)
+        academy_class = validated_data.get("academy_class")
+        if academy_class:
+            ClassAttendance.objects.create(
+                academy_class=academy_class, walk_in_user=walk_in_user
+            )
+
+        return validated_data
 
 
 class ReadWalkInUserSerializer(serializers.ModelSerializer):
