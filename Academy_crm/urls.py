@@ -43,6 +43,7 @@ urlpatterns = [
     path("api/v1/class/", include("Academy_class.urls"), name="class-v1"),
     path("api/v1/", include("leads.urls"), name="lead-v1"),
     path("api/v1/task/", include("tasks.urls"), name="tasks-v1"),
+    path("api/dashboard/v1/", include("dashboard.urls"), name="dashboard-v1"),
     path(
         "api/docs/",
         schema_view.with_ui("swagger", cache_timeout=0),

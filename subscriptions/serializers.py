@@ -213,7 +213,7 @@ class ReadWalkInTypeSerializer(serializers.Serializer):
 
 class WalkInUserSerializer(serializers.ModelSerializer):
     walk_in_type = serializers.PrimaryKeyRelatedField(
-        queryset=WalkInType.objects.all(), required=True
+        queryset=WalkInType.objects.all(), required=False
     )
     added_by = serializers.HiddenField(
         default=serializers.CurrentUserDefault(),

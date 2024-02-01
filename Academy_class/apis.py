@@ -4,6 +4,7 @@ from rest_framework.permissions import DjangoModelPermissions
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
+from Academy_class.filters import AcademyClassFilter
 from Academy_class.models import AcademyClass, ClassAttendance
 from Academy_class.serializers import (
     AcademyClassSerializer,
@@ -19,13 +20,15 @@ class AcademyClassViewSet(ModelViewSet):
         "-created_at"
     )
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = {
-        "instructor_id": ["exact"],
-        "gender": ["exact"],
-        "is_active": ["exact"],
-        "age_group": ["exact"],
-        "maximum_capacity": ["exact"],
-    }
+    filterset_class = AcademyClassFilter
+    # filterset_fields = {
+    #     "instructor_id": ["exact"],
+    #     "gender": ["exact"],
+    #     "is_active": ["exact"],
+    #     "age_group": ["exact"],
+    #     "maximum_capacity": ["exact"],
+    #     "dates": ["contains"],
+    # }
     search_fields = [
         "id",
         "name",
