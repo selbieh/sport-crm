@@ -1,3 +1,4 @@
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from clients.models import TimeStampedModel, User
@@ -9,7 +10,7 @@ from subscriptions.models import Subscription, WalkInUser
 # Create your models here.
 class AcademyClass(TimeStampedModel):
     name = models.CharField(max_length=150, null=False, blank=False)
-    dates = models.JSONField(default=list, null=True, blank=True)
+    dates = ArrayField(base_field=models.DateField(), null=True, blank=True)
     time_from = models.TimeField(null=True, blank=True)
     time_to = models.TimeField(null=True, blank=True)
     instructor = models.ForeignKey(

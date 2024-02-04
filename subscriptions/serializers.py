@@ -100,6 +100,8 @@ class ReadUserSubscriptionSerializer(serializers.Serializer):
     end_date = serializers.DateField()
     freezing_days = serializers.IntegerField()
     payment_method = serializers.CharField()
+    cash_amount = serializers.DecimalField(max_digits=10, decimal_places=3)
+    visa_amount = serializers.DecimalField(max_digits=10, decimal_places=3)
     total_amount = serializers.DecimalField(max_digits=10, decimal_places=3)
     discount_type = serializers.CharField()
     discount = serializers.FloatField()

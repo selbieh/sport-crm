@@ -52,11 +52,17 @@ class Subscription(TimeStampedModel):
     added_by = models.ForeignKey(
         User, on_delete=models.PROTECT, related_name="added_by_subscriptions", null=True
     )
-    start_date = models.DateField(auto_now_add=True)
+    start_date = models.DateField(null=True)
     end_date = models.DateField(null=True)
     freezing_days = models.IntegerField(default=False)
     payment_method = models.CharField(
         _("payment_method"), max_length=255, null=True, blank=True
+    )
+    cash_amount = models.DecimalField(
+        _("cash_amount"), max_digits=10, decimal_places=3, null=True
+    )
+    visa_amount = models.DecimalField(
+        _("visa_amount"), max_digits=10, decimal_places=3, null=True
     )
     total_amount = models.DecimalField(
         _("total_amount"), max_digits=10, decimal_places=3, null=True

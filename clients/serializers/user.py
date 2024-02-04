@@ -10,6 +10,8 @@ from clients.utility import generate_random_password, Base64ImageField
 class UserSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     avatar = Base64ImageField(required=False)
+    password = serializers.CharField(min_length=5, write_only=True)
+    confirm_password = serializers.CharField(min_length=5, write_only=True)
 
     class Meta:
         model = User
@@ -22,11 +24,19 @@ class UserSerializer(serializers.ModelSerializer):
             "gender",
             "groups",
             "avatar",
+            "password",
+            "confirm_password",
         ]
 
+    def validate(self, attrs):
+        if attrs.get("confirm_password") != attrs.get("password"):
+            raise serializers.ValidationError("passwords does not match")
+        return attrs
+
     def create(self, validated_data):
+        validated_data.pop("confirm_password")
         user = super().create(validated_data)
-        user.set_password(generate_random_password())
+        user.set_password(validated_data.get("password"))
         user.save()
         return user
 

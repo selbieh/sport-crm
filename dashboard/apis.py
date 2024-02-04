@@ -55,16 +55,25 @@ class HomeDashboardAnalyticsApi(ListAPIView):
             from rest_framework import serializers
 
             raise serializers.ValidationError("must provide year to get results")
-        context = {
-            "income_per_month": Subscription.objects.filter(created_at__year=year)
+        subscriptions = (
+            Subscription.objects.filter(created_at__year=year)
             .values(month=ExtractMonth("created_at"))
-            .annotate(total_income=Sum("total_amount")),
-            "loads": Lead.objects.all()
+            .annotate(total_income=Sum("total_amount"))
+        )
+        leads = (
+            Lead.objects.filter(created_at__year=year)
             .values("status")
-            .annotate(total_leads=Count("id")),
-            "members": User.objects.filter(groups__name="Member")
+            .annotate(total_leads=Count("id"))
+        )
+        users = (
+            User.objects.filter(groups__name="Member", created_at__year=year)
             .values("gender")
-            .annotate(total_members=Count("id")),
+            .annotate(total_members=Count("id"))
+        )
+        context = {
+            "income_per_month": subscriptions if subscriptions else 0,
+            "loads": leads if leads else 0,
+            "members": users if users else 0,
         }
         return Response(context)
 
