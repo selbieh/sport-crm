@@ -7,11 +7,13 @@ from rest_framework.generics import ListAPIView
 from rest_framework.permissions import DjangoModelPermissions
 from rest_framework.response import Response
 
+from Academy_class.models import AcademyClass
 from clients.models import User
 from dashboard.filters import HomeDashboardExpirationFilter
 from dashboard.serializers import (
     HomeDashboardExpirationSerializer,
-    UserSubscriptionSerializer,
+    SalesSubscriptionSerializer,
+    SalesClassSerializer,
 )
 from leads.models import Lead
 from subscriptions.models import Subscription
@@ -78,24 +80,26 @@ class HomeDashboardAnalyticsApi(ListAPIView):
         return Response(context)
 
 
-class HomeMemberShipSalesClassesApi(ListAPIView):
+class HomeMemberShipSalesSubscriptionApi(ListAPIView):
     permission_classes = [DjangoModelPermissions]
-    serializer_class = None
+    serializer_class = SalesSubscriptionSerializer
     queryset = Subscription.objects.all()
 
-    def get(self, request, *args, **kwargs):
-        subscriptions = (
+    def get_queryset(self):
+        return (
             Subscription.objects.filter(plan__duration_type=DAYS)
-            .values("user")
+            .values("sales_person")
             .annotate(subscriptions_count=Count("id"), total_amount=Sum("total_amount"))
         )
-        academy_classes = (
-            Subscription.objects.filter(plan__duration_type=SESSIONS)
-            .values("user")
-            .annotate(subscriptions_count=Count("id"), total_amount=Sum("total_amount"))
+
+
+class HomeMemberShipSalesClassApi(ListAPIView):
+    permission_classes = [DjangoModelPermissions]
+    serializer_class = SalesClassSerializer
+    queryset = AcademyClass.objects.all()
+
+    def get_queryset(self):
+        return self.queryset.values("instructor").annotate(
+            classes_count=Count("id"),
+            total_amount=Sum("academy_class_attendance__subscription__total_amount"),
         )
-        context = {
-            "membership": UserSubscriptionSerializer(subscriptions, many=True).data,
-            "classes": UserSubscriptionSerializer(academy_classes, many=True).data,
-        }
-        return Response(context)

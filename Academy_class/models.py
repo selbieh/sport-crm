@@ -28,24 +28,6 @@ class AcademyClass(TimeStampedModel):
         verbose_name_plural = _("Academy Classes")
 
 
-# class ClassSubscription(TimeStampedModel):
-#     user = models.ForeignKey(
-#         User, on_delete=models.PROTECT, related_name="user_class_subscriptions"
-#     )
-#     academy_class = models.ForeignKey(
-#         AcademyClass,
-#         on_delete=models.PROTECT,
-#         related_name="academy_class_subscriptions",
-#         null=True,
-#     )
-#     start_date = models.DateField(auto_now_add=True)
-#     end_date = models.DateField(null=True)
-#
-#     class Meta:
-#         verbose_name = _("Class Subscription")
-#         verbose_name_plural = _("Class Subscriptions")
-
-
 class ClassAttendance(TimeStampedModel):
     subscription = models.ForeignKey(
         Subscription,

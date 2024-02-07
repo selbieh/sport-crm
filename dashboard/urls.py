@@ -3,7 +3,8 @@ from django.urls import path, include
 from dashboard.apis import (
     HomeDashboardExpirationApi,
     HomeDashboardAnalyticsApi,
-    HomeMemberShipSalesClassesApi,
+    HomeMemberShipSalesSubscriptionApi,
+    HomeMemberShipSalesClassApi,
 )
 
 urlpatterns = [
@@ -18,8 +19,13 @@ urlpatterns = [
         name="home-dashboard-analytics",
     ),
     path(
-        "memberships/analytics/",
-        HomeMemberShipSalesClassesApi.as_view(),
-        name="home-membership-analytics",
+        "memberships/subscription/analytics/",
+        HomeMemberShipSalesSubscriptionApi.as_view(),
+        name="home-membership-subscription-analytics",
+    ),
+    path(
+        "memberships/classes/analytics/",
+        HomeMemberShipSalesClassApi.as_view(),
+        name="home-membership-sales-analytics",
     ),
 ]

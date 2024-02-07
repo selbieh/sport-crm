@@ -15,11 +15,23 @@ class HomeDashboardExpirationSerializer(serializers.Serializer):
     sales_person = ReadUserDataSerializer()
 
 
-class UserSubscriptionSerializer(serializers.Serializer):
-    user = serializers.SerializerMethodField()
+class SalesSubscriptionSerializer(serializers.Serializer):
+    sales_person = serializers.SerializerMethodField()
     subscriptions_count = serializers.IntegerField()
     total_amount = serializers.DecimalField(max_digits=10, decimal_places=3)
 
-    def get_user(self, obj):
-        user = User.objects.get(id=obj["user"])
+    def get_sales_person(self, obj):
+        user_id = obj["sales_person"]
+        if user_id:
+            user = User.objects.get(id=user_id)
+            return ReadUserDataSerializer(user).data
+        return None
+
+
+class SalesClassSerializer(serializers.Serializer):
+    instructor = serializers.SerializerMethodField()
+    total_amount = serializers.DecimalField(max_digits=10, decimal_places=3)
+
+    def get_instructor(self, obj):
+        user = User.objects.get(id=obj["instructor"])
         return ReadUserDataSerializer(user).data
