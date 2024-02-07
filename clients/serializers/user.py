@@ -40,6 +40,14 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
+    def update(self, instance, validated_data):
+        instance = super().update(instance, validated_data)
+        password = validated_data.get("password")
+        if password:
+            instance.set_password(password)
+        instance.save()
+        return instance
+
 
 class ReadUserDataSerializer(serializers.Serializer):
     id = serializers.IntegerField()
