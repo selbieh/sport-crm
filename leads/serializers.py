@@ -67,8 +67,9 @@ class ConvertLeadToMemberSerializer(UserSubscriptionSerializer):
         with transaction.atomic():
             lead_user = self.create_lead_user()
             instance = Subscription.objects.create(user=lead_user, **validated_data)
-            instance.end_date = instance.start_date + timedelta(
-                days=instance.plan.number_of_duration_days
-            )
+            if instance.start_date:
+                instance.end_date = instance.start_date + timedelta(
+                    days=instance.plan.number_of_duration_days
+                )
             instance.save()
         return instance
