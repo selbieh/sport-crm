@@ -40,6 +40,8 @@ class ReadLeadSerializer(serializers.Serializer):
 
 
 class ConvertLeadToMemberSerializer(UserSubscriptionSerializer):
+    start_date = serializers.DateField(required=True)
+
     class Meta:
         model = Subscription
         exclude = ("user", "end_date", "is_safe_deleted", "freezing_days")
