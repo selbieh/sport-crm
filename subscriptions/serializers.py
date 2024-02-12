@@ -69,26 +69,28 @@ class UserSubscriptionSerializer(serializers.ModelSerializer):
     added_by = serializers.HiddenField(
         default=serializers.CurrentUserDefault(),
     )
+    start_date = serializers.DateField(required=True)
+    end_date = serializers.DateField(required=True)
 
     class Meta:
         model = Subscription
-        exclude = ("end_date", "is_safe_deleted", "freezing_days")
+        exclude = ("is_safe_deleted", "freezing_days")
 
-    def create(self, validated_data):
-        instance = super().create(validated_data)
-        instance.end_date = instance.start_date + timedelta(
-            days=instance.plan.number_of_duration_days
-        )
-        instance.save()
-        return instance
-
-    def update(self, instance, validated_data):
-        instance = super().update(instance, validated_data)
-        instance.end_date = instance.start_date + timedelta(
-            days=instance.plan.number_of_duration_days
-        )
-        instance.save()
-        return instance
+    # def create(self, validated_data):
+    #     instance = super().create(validated_data)
+    #     instance.end_date = instance.start_date + timedelta(
+    #         days=instance.plan.number_of_duration_days
+    #     )
+    #     instance.save()
+    #     return instance
+    #
+    # def update(self, instance, validated_data):
+    #     instance = super().update(instance, validated_data)
+    #     instance.end_date = instance.start_date + timedelta(
+    #         days=instance.plan.number_of_duration_days
+    #     )
+    #     instance.save()
+    #     return instance
 
 
 class ReadUserSubscriptionSerializer(serializers.Serializer):

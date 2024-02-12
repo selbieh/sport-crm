@@ -97,6 +97,14 @@ class HomeMemberShipSalesClassApi(ListAPIView):
     permission_classes = [DjangoModelPermissions]
     serializer_class = SalesClassSerializer
     queryset = AcademyClass.objects.all()
+    filter_backends = [filters.SearchFilter]
+    search_fields = [
+        "id",
+        "name",
+        "instructor__first_name",
+        "instructor__last_name",
+        "instructor__mobile",
+    ]
 
     def get_queryset(self):
         return self.queryset.values("instructor").annotate(

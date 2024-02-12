@@ -30,6 +30,7 @@ class SalesSubscriptionSerializer(serializers.Serializer):
 
 class SalesClassSerializer(serializers.Serializer):
     instructor = serializers.SerializerMethodField()
+    classes_count = serializers.IntegerField()
     total_amount = serializers.DecimalField(max_digits=10, decimal_places=3)
 
     def get_instructor(self, obj):

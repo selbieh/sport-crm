@@ -89,6 +89,8 @@ class UserSubscriptionViewSet(ModelViewSet):
         "user_id": ["exact"],
         "sales_person__id": ["exact"],
         "plan__duration_type": ["exact"],
+        "start_date": ["exact"],
+        "end_date": ["exact"],
     }
     search_fields = [
         "id",
